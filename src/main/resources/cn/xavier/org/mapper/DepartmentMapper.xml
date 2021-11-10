@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xavier.org.mapper.DepartmentMapper">
+
+    <!--void save(Department department);-->
+    <insert id="save">
+        INSERT INTO t_department (sn, name, dirPath, state, manager_id, parent_id)
+        VALUES (
+            #{sn},
+            #{name},
+            #{dirPath},
+            #{state},
+            #{manager.id},
+            #{parent.id}
+        )
+    </insert>
+
+    <!--void update(Department department);-->
+    <update id="update">
+        UPDATE t_department SET
+            sn=#{sn},
+            name=#{name},
+            dirPath=#{dirPath},
+            state=#{state},
+            manager_id=#{manager.id},
+            parent_id=#{parent.id}
+        WHERE id = #{id}
+    </update>
+
+    <!--void delete(Long id);-->
+    <delete id="delete">
+        DELETE FROM t_department WHERE id = #{id}
+    </delete>
+    <!--Department loadById(Long id);-->
+    <select id="loadById" resultType="Department">
+        SELECT * FROM t_department WHERE id = #{id}
+    </select>
+
+    <!--List<Department> loadAll();-->
+    <select id="loadAll" resultType="Department">
+        SELECT * FROM t_department
+    </select>
+
+
+    <!--Long queryCount(DepartmentQuery departmentQuery);-->
+    <select id="queryCount" resultType="long">
+        SELECT COUNT(1) FROM t_department
+    </select>
+
+    <!--List<Department> queryData(DepartmentQuery departmentQuery);-->
+    <select id="queryData" resultType="Department">
+        SELECT * FROM t_department
+        LIMIT #{start}, #{pageSize}
+    </select>
+</mapper>
