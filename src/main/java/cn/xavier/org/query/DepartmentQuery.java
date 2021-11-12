@@ -1,6 +1,6 @@
 package cn.xavier.org.query;
 
-import cn.xavier.basic.util.query.BaseQuery;
+import cn.xavier.basic.util.BaseQuery;
 import lombok.Data;
 
 /**
