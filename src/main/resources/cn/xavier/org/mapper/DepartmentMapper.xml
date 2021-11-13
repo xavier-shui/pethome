@@ -49,8 +49,35 @@
     </select>
 
     <!--List<Department> queryData(DepartmentQuery departmentQuery);-->
-    <select id="queryData" resultType="Department">
-        SELECT * FROM t_department
+    <select id="queryData" resultMap="DepartmentMap">
+        SELECT
+            d.*,
+            e.id eid,
+            e.username,
+            p.id pid,
+            p.NAME pname
+        FROM
+            t_department d
+            LEFT JOIN t_employee e ON d.manager_id = e.id
+            LEFT JOIN t_department p ON d.parent_id = p.id
         LIMIT #{start}, #{pageSize}
     </select>
+
+    <resultMap id="DepartmentMap" type="Department">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="dirPath" property="dirPath"/>
+        <result column="state" property="state"/>
+        <result column="manager_id" property="manager_id"/>
+        <result column="parent_id" property="parent_id"/>
+        <association property="manager" javaType="Employee">
+            <id column="eid" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="parent" javaType="Department">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+        </association>
+    </resultMap>
 </mapper>

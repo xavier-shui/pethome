@@ -42,6 +42,7 @@ public class IDepartmentServiceTest extends BaseTest {
     public void queryPage() {
         DepartmentQuery departmentQuery = new DepartmentQuery();
         departmentQuery.setCurrentPage(2);
+        departmentQuery.setPageSize(3);
         departmentService.queryPage(departmentQuery).getRows().forEach(System.out::println);
     }
 }
