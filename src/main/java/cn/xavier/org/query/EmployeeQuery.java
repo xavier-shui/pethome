@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 11/11/2021
  */
 @Data
-public class DepartmentQuery extends BaseQuery {
+public class EmployeeQuery extends BaseQuery {
     // 关键字查询
     private String keyword;
 }

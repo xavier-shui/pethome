@@ -84,4 +84,23 @@ public class DepartmentController {
     public PageList<Department> queryPage(@RequestBody DepartmentQuery departmentQuery) {
         return departmentService.queryPage(departmentQuery);
     }
+
+    /**
+     * 批量删除部门
+     *
+     * @param ids ids
+     * @return the ajax response
+     */
+    @PatchMapping
+    public AjaxResponse batchRemove(@RequestBody List<Long> ids) {
+        departmentService.batchRemove(ids);
+        return null;
+    }
+
+    @GetMapping("/tree")
+    public List<Department> queryTree() {
+        return departmentService.queryTree();
+    }
+
+
 }

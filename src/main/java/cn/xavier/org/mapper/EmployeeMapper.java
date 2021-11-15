@@ -1,7 +1,7 @@
 package cn.xavier.org.mapper;
 
-import cn.xavier.org.domain.Department;
-import cn.xavier.org.query.DepartmentQuery;
+import cn.xavier.org.domain.Employee;
+import cn.xavier.org.query.EmployeeQuery;
 
 import java.util.List;
 
@@ -9,21 +9,21 @@ import java.util.List;
  * @author Zheng-Wei Shui
  * @date 11/11/2021
  */
-public interface DepartmentMapper {
+public interface EmployeeMapper {
 
     /**
      * Save *
      *
-     * @param department department
+     * @param employee employee
      */
-    void save(Department department);
+    void save(Employee employee);
 
     /**
      * Update *
      *
-     * @param department department
+     * @param employee employee
      */
-    void update(Department department);
+    void update(Employee employee);
 
     /**
      * Delete *
@@ -36,32 +36,32 @@ public interface DepartmentMapper {
      * Load by id
      *
      * @param id id
-     * @return the department
+     * @return the employee
      */
-    Department loadById(Long id);
+    Employee loadById(Long id);
 
     /**
      * Load all list
      *
      * @return the list
      */
-    List<Department> loadAll();
+    List<Employee> loadAll();
 
     /**
      * Query count 高级+分页查询
      *
-     * @param departmentQuery department query
+     * @param employeeQuery employee query
      * @return the
      */
-    Long queryCount(DepartmentQuery departmentQuery);
+    Long queryCount(EmployeeQuery employeeQuery);
 
     /**
      * Query data 高级+分页查询
      *
-     * @param departmentQuery department query
+     * @param employeeQuery employee query
      * @return the list
      */
-    List<Department> queryData(DepartmentQuery departmentQuery);
+    List<Employee> queryData(EmployeeQuery employeeQuery);
 
     /**
      * 批量删除
@@ -69,6 +69,4 @@ public interface DepartmentMapper {
      * @param ids ids
      */
     void batchDelete(List<Long> ids);
-
-    List<Department> loadTree();
 }

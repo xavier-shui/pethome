@@ -1,8 +1,8 @@
 package cn.xavier.org.service;
 
 import cn.xavier.basic.util.PageList;
-import cn.xavier.org.domain.Department;
-import cn.xavier.org.query.DepartmentQuery;
+import cn.xavier.org.domain.Employee;
+import cn.xavier.org.query.EmployeeQuery;
 
 import java.util.List;
 
@@ -10,21 +10,21 @@ import java.util.List;
  * @author Zheng-Wei Shui
  * @date 11/11/2021
  */
-public interface IDepartmentService {
+public interface IEmployeeService {
 
     /**
      * Add *
      *
-     * @param department department
+     * @param employee employee
      */
-    void add(Department department);
+    void add(Employee employee);
 
     /**
      * Update *
      *
-     * @param department department
+     * @param employee employee
      */
-    void update(Department department);
+    void update(Employee employee);
 
     /**
      * Remove *
@@ -34,27 +34,27 @@ public interface IDepartmentService {
     void remove(Long id);
 
     /**
-     * Find by id department
+     * Find by id employee
      *
      * @param id id
-     * @return the department
+     * @return the employee
      */
-    Department findById(Long id);
+    Employee findById(Long id);
 
     /**
      * Find all
      *
      * @return the list
      */
-    List<Department> findAll();
+    List<Employee> findAll();
 
     /**
      * Query page
      *
-     * @param departmentQuery department query
+     * @param employeeQuery employee query
      * @return the page list
      */
-    PageList<Department> queryPage(DepartmentQuery departmentQuery);
+    PageList<Employee> queryPage(EmployeeQuery employeeQuery);
 
     /**
      * Batch remove
@@ -62,6 +62,4 @@ public interface IDepartmentService {
      * @param ids ids
      */
     void batchRemove(List<Long> ids);
-
-    List<Department> queryTree();
 }

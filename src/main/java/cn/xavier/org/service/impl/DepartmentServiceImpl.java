@@ -27,11 +27,22 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Transactional
     public void add(Department department) {
         departmentMapper.save(department);
+        this.update(department);
     }
 
     @Override
     @Transactional
     public void update(Department department) {
+        // 追加dirPath
+        String dirPath = "";
+        if (department.getParent() == null) { // 顶部门
+            dirPath = "/" + department.getId();
+        } else {
+            Long parentId = department.getParent().getId();
+            Department parentDepartment = departmentMapper.loadById(parentId);
+            dirPath = parentDepartment.getDirPath() + "/" + department.getId();
+        }
+        department.setDirPath(dirPath);
         departmentMapper.update(department);
     }
 
@@ -60,5 +71,16 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
         List<Department> rows = departmentMapper.queryData(departmentQuery);
         return new PageList<>(totals, rows);
+    }
+
+    @Override
+    @Transactional
+    public void batchRemove(List<Long> ids) {
+        departmentMapper.batchDelete(ids);
+    }
+
+    @Override
+    public List<Department> queryTree() {
+        return departmentMapper.loadTree();
     }
 }

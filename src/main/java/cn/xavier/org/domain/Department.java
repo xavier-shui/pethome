@@ -3,6 +3,9 @@ package cn.xavier.org.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Zheng-Wei Shui
  * @date 11/11/2021
@@ -24,4 +27,6 @@ public class Department {
     // 上级部门
     private Department parent;
     private Long parent_id;
+
+    private List<Department> children = new ArrayList<>();
 }

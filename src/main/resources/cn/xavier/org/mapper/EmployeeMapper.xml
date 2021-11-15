@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.xavier.org.mapper.DepartmentMapper">
+<mapper namespace="cn.xavier.org.mapper.EmployeeMapper">
 
-    <!--void save(Department department);-->
-    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO t_department (sn, name, dirPath, state, manager_id, parent_id)
+    <!--void save(Employee employee);-->
+    <insert id="save">
+        INSERT INTO t_employee (sn, name, dirPath, state, manager_id, parent_id)
         VALUES (
             #{sn},
             #{name},
@@ -16,9 +16,9 @@
         )
     </insert>
 
-    <!--void update(Department department);-->
+    <!--void update(Employee employee);-->
     <update id="update">
-        UPDATE t_department SET
+        UPDATE t_employee SET
             sn=#{sn},
             name=#{name},
             dirPath=#{dirPath},
@@ -30,27 +30,27 @@
 
     <!--void delete(Long id);-->
     <delete id="delete">
-        DELETE FROM t_department WHERE id = #{id}
+        DELETE FROM t_employee WHERE id = #{id}
     </delete>
-    <!--Department loadById(Long id);-->
-    <select id="loadById" resultType="Department">
-        SELECT * FROM t_department WHERE id = #{id}
+    <!--Employee loadById(Long id);-->
+    <select id="loadById" resultType="Employee">
+        SELECT * FROM t_employee WHERE id = #{id}
     </select>
 
-    <!--List<Department> loadAll();-->
-    <select id="loadAll" resultType="Department">
-        SELECT * FROM t_department
+    <!--List<Employee> loadAll();-->
+    <select id="loadAll" resultType="Employee">
+        SELECT * FROM t_employee
     </select>
 
 
-    <!--Long queryCount(DepartmentQuery departmentQuery);-->
+    <!--Long queryCount(EmployeeQuery employeeQuery);-->
     <select id="queryCount" resultType="long">
-        SELECT COUNT(1) FROM t_department d
+        SELECT COUNT(1) FROM t_employee d
         <include refid="querySql"/>
     </select>
 
-    <!--List<Department> queryData(DepartmentQuery departmentQuery);-->
-    <select id="queryData" resultMap="DepartmentMap">
+    <!--List<Employee> queryData(EmployeeQuery employeeQuery);-->
+    <select id="queryData" resultMap="EmployeeMap">
         SELECT
             d.*,
             e.id eid,
@@ -58,9 +58,9 @@
             p.id pid,
             p.NAME pname
         FROM
-            t_department d
+            t_employee d
             LEFT JOIN t_employee e ON d.manager_id = e.id
-            LEFT JOIN t_department p ON d.parent_id = p.id
+            LEFT JOIN t_employee p ON d.parent_id = p.id
         <include refid="querySql"/>
         LIMIT #{start}, #{pageSize}
     </select>
@@ -73,7 +73,7 @@
         </where>
     </sql>
 
-    <resultMap id="DepartmentMap" type="Department">
+    <resultMap id="EmployeeMap" type="Employee">
         <id column="id" property="id"/>
         <result column="sn" property="sn"/>
         <result column="name" property="name"/>
@@ -85,7 +85,7 @@
             <id column="eid" property="id"/>
             <result column="username" property="username"/>
         </association>
-        <association property="parent" javaType="Department">
+        <association property="parent" javaType="Employee">
             <id column="pid" property="id"/>
             <result column="pname" property="name"/>
         </association>
@@ -93,32 +93,9 @@
 
     <!--void batchDelete(List<Long> ids);-->
     <delete id="batchDelete">
-        DELETE FROM t_department WHERE id IN
+        DELETE FROM t_employee WHERE id IN
         <foreach collection="list" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </delete>
-
-    <!--List<Department> loadTree();-->
-    <select id="loadTree" resultMap="treeMap">
-        SELECT
-            p.id,
-            p.NAME,
-            c.id cid,
-            c.NAME cname
-        FROM
-            t_department p
-            LEFT JOIN t_department c ON p.id = c.parent_id
-        WHERE
-            p.parent_id IS NULL
-    </select>
-
-    <resultMap id="treeMap" type="Department">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <collection property="children" ofType="Department">
-            <id column="cid" property="id"/>
-            <result column="cname" property="name"/>
-        </collection>
-    </resultMap>
 </mapper>
