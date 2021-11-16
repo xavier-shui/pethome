@@ -1,67 +1,18 @@
 package cn.xavier.org.service;
 
-import cn.xavier.basic.util.PageList;
+import cn.xavier.basic.service.IBaseService;
 import cn.xavier.org.domain.Department;
-import cn.xavier.org.query.DepartmentQuery;
 
 import java.util.List;
 
 /**
+ * 部门业务层
  * @author Zheng-Wei Shui
  * @date 11/11/2021
  */
-public interface IDepartmentService {
+public interface IDepartmentService extends IBaseService<Department> {
+    // 1. 基本CRUD直接继承
 
-    /**
-     * Add *
-     *
-     * @param department department
-     */
-    void add(Department department);
-
-    /**
-     * Update *
-     *
-     * @param department department
-     */
-    void update(Department department);
-
-    /**
-     * Remove *
-     *
-     * @param id id
-     */
-    void remove(Long id);
-
-    /**
-     * Find by id department
-     *
-     * @param id id
-     * @return the department
-     */
-    Department findById(Long id);
-
-    /**
-     * Find all
-     *
-     * @return the list
-     */
-    List<Department> findAll();
-
-    /**
-     * Query page
-     *
-     * @param departmentQuery department query
-     * @return the page list
-     */
-    PageList<Department> queryPage(DepartmentQuery departmentQuery);
-
-    /**
-     * Batch remove
-     *
-     * @param ids ids
-     */
-    void batchRemove(List<Long> ids);
-
+    // 2. 特有的方法自己写
     List<Department> queryTree();
 }
