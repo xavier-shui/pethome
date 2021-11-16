@@ -1,74 +1,18 @@
 package cn.xavier.org.mapper;
 
+import cn.xavier.basic.mapper.BaseMapper;
 import cn.xavier.org.domain.Department;
-import cn.xavier.org.query.DepartmentQuery;
 
 import java.util.List;
 
 /**
+ * 部门持久化层
  * @author Zheng-Wei Shui
  * @date 11/11/2021
  */
-public interface DepartmentMapper {
+public interface DepartmentMapper extends BaseMapper<Department> {
+    // 1. 基本CRUD直接继承
 
-    /**
-     * Save *
-     *
-     * @param department department
-     */
-    void save(Department department);
-
-    /**
-     * Update *
-     *
-     * @param department department
-     */
-    void update(Department department);
-
-    /**
-     * Delete *
-     *
-     * @param id id
-     */
-    void delete(Long id);
-
-    /**
-     * Load by id
-     *
-     * @param id id
-     * @return the department
-     */
-    Department loadById(Long id);
-
-    /**
-     * Load all list
-     *
-     * @return the list
-     */
-    List<Department> loadAll();
-
-    /**
-     * Query count 高级+分页查询
-     *
-     * @param departmentQuery department query
-     * @return the
-     */
-    Long queryCount(DepartmentQuery departmentQuery);
-
-    /**
-     * Query data 高级+分页查询
-     *
-     * @param departmentQuery department query
-     * @return the list
-     */
-    List<Department> queryData(DepartmentQuery departmentQuery);
-
-    /**
-     * 批量删除
-     *
-     * @param ids ids
-     */
-    void batchDelete(List<Long> ids);
-
+    // 2. 特有的方法自己写
     List<Department> loadTree();
 }

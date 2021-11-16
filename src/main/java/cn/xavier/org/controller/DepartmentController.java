@@ -82,7 +82,7 @@ public class DepartmentController {
      */
     @PostMapping("/list")
     public PageList<Department> queryPage(@RequestBody DepartmentQuery departmentQuery) {
-        return departmentService.queryPage(departmentQuery);
+         return departmentService.queryPage(departmentQuery);
     }
 
     /**
@@ -97,6 +97,11 @@ public class DepartmentController {
         return null;
     }
 
+    /**
+     * Query tree 查部门树, 用于级联菜单
+     *
+     * @return the list
+     */
     @GetMapping("/tree")
     public List<Department> queryTree() {
         return departmentService.queryTree();
