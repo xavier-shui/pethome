@@ -6,7 +6,8 @@ spring:
     password: 123456
 
 mybatis:
-  type-aliases-package: cn.xavier.org.domain,cn.xavier.org.query
+  type-aliases-package: cn.xavier.org.domain,cn.xavier.org.query,
+                        cn.xavier.system.domain,cn.xavier.system.query
 
 logging:
   file: logs/application-debug.log

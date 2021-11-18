@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xavier.system.mapper.DictionaryTypeMapper">
+
+    <!--void save(DictionaryType dictionaryType);-->
+    <insert id="save">
+        INSERT INTO t_systemdictionarytype (sn, name)
+        VALUES (
+            #{sn},
+            #{name}
+        )
+    </insert>
+
+    <!--void update(DictionaryType dictionaryType);-->
+    <update id="update">
+        UPDATE t_systemdictionarytype SET
+            sn=#{sn},
+            name=#{name}
+        WHERE id = #{id}
+    </update>
+
+    <!--void delete(Long id);-->
+    <delete id="delete">
+        DELETE FROM t_systemdictionarytype WHERE id = #{id}
+    </delete>
+
+    <!--DictionaryType loadById(Long id);-->
+    <select id="loadById" resultType="DictionaryType">
+        SELECT * FROM t_systemdictionarytype WHERE id = #{id}
+    </select>
+
+    <!--List<DictionaryType> loadAll();-->
+    <select id="loadAll" resultType="DictionaryType">
+        SELECT * FROM t_systemdictionarytype
+    </select>
+
+    <!--Long queryCount(DictionaryTypeQuery dictionaryTypeQuery);-->
+    <select id="queryCount" resultType="long">
+        SELECT COUNT(1) FROM t_systemdictionarytype t
+        <include refid="querySql"/>
+    </select>
+
+    <!--List<DictionaryType> queryData(DictionaryTypeQuery dictionaryTypeQuery);-->
+    <!--本打算弄好children，所以搞了resultMap-->
+    <select id="queryData" resultMap="DictionaryTypeMap">
+        SELECT
+            *
+        FROM
+            t_systemdictionarytype t
+        <include refid="querySql"/>
+        LIMIT #{start}, #{pageSize}
+    </select>
+        <!--取limit时有问题，因为同一个类型会出现n行-->
+        <!--SELECT-->
+            <!--t.*,-->
+            <!--d.id did,-->
+            <!--d.NAME dname-->
+        <!--FROM-->
+            <!--t_systemdictionarytype t-->
+            <!--LEFT JOIN t_systemdictionarydetail d ON t.id = d.types_id-->
+
+    <sql id="querySql">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (t.sn LIKE CONCAT('%', #{keyword}, '%') OR t.name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="DictionaryTypeMap" type="DictionaryType">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+    </resultMap>
+        <!--<collection property="details" ofType="DictionaryDetail">-->
+            <!--<id column="did" property="id"/>-->
+            <!--<result column="dname" property="name"/>-->
+        <!--</collection>-->
+
+    <!--void batchDelete(List<Long> ids);-->
+    <delete id="batchDelete">
+        DELETE FROM t_systemdictionarytype WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

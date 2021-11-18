@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 /**
- * 新增和修改数据的请求切面公共代码
+ * 新增,修改和删除数据请求的切面公共代码
  * @author Zheng-Wei Shui
  * @date 11/13/2021
  */
