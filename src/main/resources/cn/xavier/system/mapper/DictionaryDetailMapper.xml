@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xavier.system.mapper.DictionaryDetailMapper">
+
+    <!--void save(DictionaryDetail dictionaryDetail);-->
+    <insert id="save">
+        INSERT INTO t_systemdictionarydetail (name, types_id)
+        VALUES (
+            #{name},
+            #{type.id}
+        )
+    </insert>
+
+    <!--void update(DictionaryDetail dictionaryDetail);-->
+    <update id="update">
+        UPDATE t_systemdictionarydetail SET
+            name = #{name},
+            types_id = #{type.id}
+        WHERE id = #{id}
+    </update>
+
+    <!--void delete(Long id);-->
+    <delete id="delete">
+        DELETE FROM t_systemdictionarydetail WHERE id = #{id}
+    </delete>
+
+    <!--DictionaryDetail loadById(Long id);-->
+    <select id="loadById" resultType="DictionaryDetail">
+        SELECT * FROM t_systemdictionarydetail WHERE id = #{id}
+    </select>
+
+    <!--List<DictionaryDetail> loadAll();-->
+    <select id="loadAll" resultType="DictionaryDetail">
+        SELECT * FROM t_systemdictionarydetail
+    </select>
+
+    <!--Long queryCount(DictionaryDetailQuery dictionaryDetailQuery);-->
+    <select id="queryCount" resultType="long">
+        SELECT COUNT(1) FROM t_systemdictionarydetail d
+        LEFT JOIN t_systemdictionarytype t ON d.types_id = t.id
+        <include refid="querySql"/>
+    </select>
+
+    <!--List<DictionaryDetail> queryData(DictionaryDetailQuery dictionaryDetailQuery);-->
+    <select id="queryData" resultMap="DictionaryDetailMap">
+        SELECT
+            d.*,
+            t.NAME tname,
+            t.sn
+        FROM
+            t_systemdictionarydetail d
+        LEFT JOIN t_systemdictionarytype t ON d.types_id = t.id
+        <include refid="querySql"/>
+        LIMIT #{start}, #{pageSize}
+    </select>
+    
+    <sql id="querySql">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (t.sn LIKE CONCAT('%', #{keyword}, '%') OR t.name LIKE CONCAT('%', #{keyword}, '%') OR d.name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="typeName != null and typeName != ''">
+                AND (t.name LIKE CONCAT('%', #{typeName}, '%'))
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="DictionaryDetailMap" type="DictionaryDetail">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="types_id" property="types_id"/>
+        <association property="type" javaType="DictionaryType">
+            <id column="types_id" property="id"/>
+            <result column="tname" property="name"/>
+            <result column="sn" property="sn"/>
+        </association>
+    </resultMap>
+
+    <!--void batchDelete(List<Long> ids);-->
+    <delete id="batchDelete">
+        DELETE FROM t_systemdictionarydetail WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--void removeByTypeIds(List<Long> typeIds);-->
+    <delete id="removeByTypeIds">
+        DELETE FROM t_systemdictionarydetail WHERE types_id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--List<DictionaryDetail> loadByTypeId(Long typeId);-->
+    <select id="loadByTypeId" resultType="DictionaryDetail">
+        SELECT * FROM t_systemdictionarydetail WHERE types_id = #{typeId}
+    </select>
+</mapper>
