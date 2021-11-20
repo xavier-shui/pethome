@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql:///pethome
     username: root
     password: 123456
+  mail:
+    host: smtp.yeah.net
+    username: shuizhengwei@yeah.net
+    password: ROZZDXKOPLOISFRJ
 
 mybatis:
   type-aliases-package: cn.xavier.org.domain,cn.xavier.org.query,

@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class AjaxResponse {
     private Boolean success = true;
     private String message = "操作成功";
+    // 额外参数
+    private Object resultObj;
     // chain method
     public AjaxResponse setSuccess(Boolean success) {
         this.success = success;
@@ -21,6 +23,11 @@ public class AjaxResponse {
 
     public AjaxResponse setMessage(String message) {
         this.message = message;
+        return this;
+    }
+
+    public AjaxResponse setResultObj(Object resultObj) {
+        this.resultObj = resultObj;
         return this;
     }
 }

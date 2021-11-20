@@ -1,5 +1,6 @@
 package cn.xavier.basic.aop;
 
+import cn.xavier.basic.exception.BusinessException;
 import cn.xavier.basic.util.AjaxResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,13 +31,18 @@ public class DMLRequestManager {
         log.debug(joinPoint.getSignature().toString() + " executed with parameters " +  Arrays.asList(joinPoint.getArgs()).toString() + "!!!!!!!!!!!");
 
         try {
-            joinPoint.proceed();
-            return AjaxResponse.of();
+            return (AjaxResponse) joinPoint.proceed();
+            // 有业务异常先catch
+        } catch (BusinessException e) {
+            // 自己写的业务异常不追踪栈了
+            return AjaxResponse.of()
+                    .setSuccess(false)
+                    .setMessage(e.getMessage());
         } catch (Throwable e) {
             e.printStackTrace();
             return AjaxResponse.of()
                     .setSuccess(false)
-                    .setMessage("操作失败");
+                    .setMessage("系统错误，操作失败");
         }
     }
 }
