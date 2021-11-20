@@ -4,28 +4,25 @@
 <mapper namespace="cn.xavier.org.mapper.EmployeeMapper">
 
     <!--void save(Employee employee);-->
-    <insert id="save">
-        INSERT INTO t_employee (sn, name, dirPath, state, manager_id, parent_id)
-        VALUES (
-            #{sn},
-            #{name},
-            #{dirPath},
-            #{state},
-            #{manager.id},
-            #{parent.id}
-        )
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_employee (username,email,phone,password,age,state,department_id)
+        VALUES (#{username},#{email},#{phone},#{password},#{age},#{state},#{department.id})
     </insert>
 
     <!--void update(Employee employee);-->
-    <update id="update">
+    <update id="update" parameterType="Employee">
         UPDATE t_employee SET
-            sn=#{sn},
-            name=#{name},
-            dirPath=#{dirPath},
+            username=#{username},
+            email=#{email},
+            phone=#{phone},
+            salt=#{salt},
+            password=#{password},
+            age=#{age},
             state=#{state},
-            manager_id=#{manager.id},
-            parent_id=#{parent.id}
-        WHERE id = #{id}
+            department_id=#{department.id},
+            logininfo_id=#{logininfo_id},
+            shop_id=#{shop_id}
+        WHERE id=#{id}
     </update>
 
     <!--void delete(Long id);-->
@@ -98,4 +95,13 @@
             #{id}
         </foreach>
     </delete>
+
+    <!-- Employee loadByAdmin(@Param("username") String username,
+                         @Param("phone") String phone,
+                         @Param("email") String email);-->
+    <select id="loadByAdmin" resultType="Employee">
+        SELECT * FROM t_employee WHERE
+            username = #{username} OR phone = #{phone} OR email = #{email}
+        LIMIT 1
+    </select>
 </mapper>

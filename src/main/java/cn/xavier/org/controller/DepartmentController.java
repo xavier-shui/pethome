@@ -39,7 +39,7 @@ public class DepartmentController {
         } else {
             departmentService.update(department);
         }
-        return null;
+        return AjaxResponse.of();
     }
 
     /**
@@ -50,7 +50,7 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     public AjaxResponse removeById(@PathVariable Long id) {
         departmentService.remove(id);
-        return null;
+        return AjaxResponse.of();
     }
 
     /**
@@ -94,7 +94,7 @@ public class DepartmentController {
     @PatchMapping
     public AjaxResponse batchRemove(@RequestBody List<Long> ids) {
         departmentService.batchRemove(ids);
-        return null;
+        return AjaxResponse.of();
     }
 
     /**

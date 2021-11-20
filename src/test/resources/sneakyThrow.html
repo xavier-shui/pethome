@@ -1,0 +1,195 @@
+<div id="main" class="flex-col clearfix" role="main">
+    <div class="code-block code-block-1" style="margin: 8px 0; clear: both;">
+        <div align="center" data-freestar-ad="__300x250 __970x90" id="baeldung_leaderboard_atf">
+            <script data-cfasync="false" type="text/javascript">
+                freestar.config.enabled_slots.push({ placementName: "baeldung_leaderboard_atf", slotId: "baeldung_leaderboard_atf" });
+            </script>
+        </div></div>
+    <article id="post-23465" class="clearfix post-23465 post type-post status-publish format-standard has-post-thumbnail hentry category-java" role="article" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://google.com/article">
+        <meta itemprop="datePublished" content="2017-09-04T17:52:48+0200">
+        <meta itemprop="dateModified" content="2020-11-09T12:25:42+0200">
+        <header>
+
+            <div class="page-header"><h1 class="single-title entry-title" itemprop="headline">“Sneaky Throws” in Java</h1>
+                <p class="post-modified">Last modified: <span class="updated">November 9, 2020</span></p>
+                <div class="meta-row">
+                    <div class="author vcard" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+                        <span class="author-by"> by </span>
+                        <span class="author-name fn" itemprop="name">
+<a href="https://www.baeldung.com/author/baeldung/" title="Posts by baeldung" rel="author">baeldung</a> </span>
+                    </div>
+                    <span itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject">
+<meta itemprop="url" content="https://www.baeldung.com/wp-content/uploads/2016/10/social-Java-On-Baeldung-2.jpg">
+<meta itemprop="width" content="208">
+<meta itemprop="height" content="208">
+</span>
+                    <span itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization">
+<span itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject">
+<meta itemprop="url" content="https://www.baeldung.com/wp-content/themes/baeldung/icon/schema-logo.png">
+<meta itemprop="width" content="300">
+<meta itemprop="height" content="300">
+</span>
+<meta itemprop="name" content="Baeldung">
+</span>
+                    <ul class="categories">
+                        <li><a href="https://www.baeldung.com/category/java/" rel="category tag">Java</a><span class="btn-share" title="Subscribe for&nbsp;Java"><span class="popup-trigger" id="java-popup-trigger">+</span></span></li> </ul>
+                    <ul class="post-tags">
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="before-post-widgets">
+            <div data-sticky-weight="1" data-height-limit="0" data-stickyness="sticky" data-geoloc-targets="" class="before-post-content-widget"><span style="display:none;">Java Top</span> <div class="textwidget"><div class="short_box short_start">
+                <h3><b>Get started with Spring 5 and Spring Boot 2, through the <em>Learn Spring</em> course:</b></h3>
+                <strong><a href="/ls-course-start">&gt;&gt; CHECK OUT THE COURSE</a></strong>
+            </div></div>
+            </div> </div>
+        <section class="post-content clearfix" itemprop="articleBody">
+            <h2 data-id="overview"><strong>1. Overview</strong><a class="anchor-link" href="#overview"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.136px" height="482.135px" viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135;" xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876   c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881   c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526   c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698   l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648   c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0   L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499   C246.724,384.578,222.588,379.197,201.206,366.698z"></path></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a></h2>
+            <div class="bd-anchor" id="overview"></div>
+            <p>In Java, the sn<em>eaky throw</em> concept allows us to throw any checked exception without defining it explicitly in the method signature. This allows the omission of the <em>throws</em> declaration, effectively imitating the characteristics of a runtime exception.</p>
+            <p>In this article, we'll see how this is done in practice, by looking at some code examples.</p>
+            <h2 data-id="throws"><strong>2. About Sneaky Throws</strong><a class="anchor-link" href="#throws"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.136px" height="482.135px" viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135;" xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876   c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881   c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526   c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698   l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648   c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0   L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499   C246.724,384.578,222.588,379.197,201.206,366.698z"></path></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a></h2>
+            <div class="bd-anchor" id="throws"></div>
+            <p><strong>Checked exceptions are part of Java, not the JVM.</strong> In the bytecode, we can throw any exception from anywhere, without restrictions.</p>
+            <p>Java 8 brought a new type inference rule that states that a <em>throws T</em> is inferred as <em>RuntimeException</em> whenever allowed. This gives the ability to implement sneaky throws without the helper method.</p>
+            <p>A problem with <em>sneaky throws </em>is that you probably want to catch the exceptions eventually, but the Java compiler doesn't allow you to catch sneakily thrown checked exceptions using exception handler for their particular exception type.</p><div class="code-block code-block-2" style="margin: 8px 0; clear: both;">
+            <div align="center" data-freestar-ad="__336x280 __728x90" id="baeldung_leaderboard_mid_1">
+                <script data-cfasync="false" type="text/javascript">
+                    freestar.config.enabled_slots.push({ placementName: "baeldung_leaderboard_mid_1", slotId: "baeldung_leaderboard_mid_1" });
+                </script>
+            </div></div>
+            <h2 data-id="sneaky"><strong>3. Sneaky Throws in Action</strong><a class="anchor-link" href="#sneaky"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.136px" height="482.135px" viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135;" xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876   c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881   c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526   c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698   l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648   c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0   L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499   C246.724,384.578,222.588,379.197,201.206,366.698z"></path></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a></h2>
+            <div class="bd-anchor" id="sneaky"></div>
+            <p>As we already mentioned, the compiler and the Jave Runtime can see different things:</p>
+            <pre style="position: relative;"><code class="language-java hljs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;E extends Throwable&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sneakyThrow</span><span class="hljs-params">(Throwable e)</span> <span class="hljs-keyword">throws</span> E </span>{
+    <span class="hljs-keyword">throw</span> (E) e;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">throwsSneakyIOException</span><span class="hljs-params">()</span> </span>{
+    sneakyThrow(<span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"sneaky"</span>));
+}</code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+            <p><strong>The compiler sees the signature with the <em>throws T</em> inferred to a<em> RuntimeException</em> type</strong>, so it allows the unchecked exception to propagate. The Java Runtime doesn't see any type in the throws as all throws are the same a simple <em>throw e</em><em>.</em></p>
+            <p>This quick test demonstrates the scenario:</p>
+            <pre style="position: relative;"><code class="language-java hljs"><span class="hljs-meta">@Test</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">whenCallSneakyMethod_thenThrowSneakyException</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">try</span> {
+        SneakyThrows.throwsSneakyIOException();
+    } <span class="hljs-keyword">catch</span> (Exception ex) {
+        assertEquals(<span class="hljs-string">"sneaky"</span>, ex.getMessage().toString());
+    }
+}</code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+            <p>It's possible to throw a checked exception using bytecode manipulation, or <em>Thread.stop(Throwable)</em>, but it's messy and not recommended.</p>
+            <h2 data-id="annotations"><strong>4. Using Lombok Annotations</strong><a class="anchor-link" href="#annotations"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.136px" height="482.135px" viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135;" xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876   c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881   c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526   c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698   l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648   c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0   L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499   C246.724,384.578,222.588,379.197,201.206,366.698z"></path></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a></h2>
+            <div class="bd-anchor" id="annotations"></div>
+            <p>The<em> @SneakyThrows </em>annotation from <a href="https://projectlombok.org/">Lombok</a> allows you to throw checked exceptions without using the <em>throws </em>declaration. This comes in handy when you need to raise an exception from a method within very restrictive interfaces like <em>Runnable. </em></p><div class="code-block code-block-3" style="margin: 8px 0; clear: both;">
+            <div align="center" data-freestar-ad="__300x250 __336x280" id="baeldung_leaderboard_mid_2">
+                <script data-cfasync="false" type="text/javascript">
+                    freestar.config.enabled_slots.push({ placementName: "baeldung_leaderboard_mid_2", slotId: "baeldung_leaderboard_mid_2" });
+                </script>
+            </div></div>
+            <p>Say we throw an exception from within a <em>Runnable</em>; it will only be passed to the <em>Thread'</em><em>s</em> unhandled exception handler.</p>
+            <p>This code will throw the <em>Exception </em>instance, so there is no need for you to wrap it in a <em>RuntimeException:</em></p>
+            <pre style="position: relative;"><code class="language-java hljs"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SneakyRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>{
+    <span class="hljs-meta">@SneakyThrows(InterruptedException.class)</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> InterruptedException();
+    }
+}</code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+            <p>A drawback with this code is that you cannot catch a checked exception that is not declared; <strong>so, it will not compile</strong>.</p>
+            <p>Here's the correct form for throwing a sneaky exception:</p>
+            <pre style="position: relative;"><code class="language-java hljs"><span class="hljs-meta">@SneakyThrows</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> InterruptedException();
+    } <span class="hljs-keyword">catch</span> (InterruptedException e) {
+        e.printStackTrace();
+    }
+}</code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+            <p>And here's the test for this behavior:</p><div class="code-block code-block-4" style="margin: 8px 0; clear: both;">
+            <div align="center" data-freestar-ad="__300x250 __336x280" id="baeldung_leaderboard_mid_3">
+                <script data-cfasync="false" type="text/javascript">
+                    freestar.config.enabled_slots.push({ placementName: "baeldung_leaderboard_mid_3", slotId: "baeldung_leaderboard_mid_3" });
+                </script>
+            </div></div>
+            <pre style="position: relative;"><code class="language-java hljs"><span class="hljs-meta">@Test</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">whenCallSneakyRunnableMethod_thenThrowException</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">new</span> SneakyRunnable().run();
+    } <span class="hljs-keyword">catch</span> (Exception e) {
+        assertEquals(InterruptedException.class, e.getStackTrace());
+    }
+}</code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+            <h2 data-id="conclusion"><strong>5. Conclusion</strong><a class="anchor-link" href="#conclusion"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="482.136px" height="482.135px" viewBox="0 0 482.136 482.135" style="enable-background:new 0 0 482.136 482.135;" xml:space="preserve"><g><path d="M455.482,198.184L326.829,326.832c-35.535,35.54-93.108,35.54-128.646,0l-42.881-42.886l42.881-42.876l42.884,42.876   c11.845,11.822,31.064,11.846,42.886,0l128.644-128.643c11.816-11.831,11.816-31.066,0-42.9l-42.881-42.881   c-11.822-11.814-31.064-11.814-42.887,0l-45.928,45.936c-21.292-12.531-45.491-17.905-69.449-16.291l72.501-72.526   c35.535-35.521,93.136-35.521,128.644,0l42.886,42.881C491.018,105.045,491.018,162.663,455.482,198.184z M201.206,366.698   l-45.903,45.9c-11.845,11.846-31.064,11.817-42.881,0l-42.884-42.881c-11.845-11.821-11.845-31.041,0-42.886l128.646-128.648   c11.819-11.814,31.069-11.814,42.884,0l42.886,42.886l42.876-42.886l-42.876-42.881c-35.54-35.521-93.113-35.521-128.65,0   L26.655,283.946c-35.538,35.545-35.538,93.146,0,128.652l42.883,42.882c35.51,35.54,93.11,35.54,128.646,0l72.496-72.499   C246.724,384.578,222.588,379.197,201.206,366.698z"></path></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a></h2>
+            <div class="bd-anchor" id="conclusion"></div>
+            <p>As we have seen in this article, the Java compiler can be tricked to treat checked exceptions as unchecked.</p>
+            <p>As always the code is available <a href="https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-exceptions">over on GitHub</a>.</p>
+            <div class="after-post-widgets"><div data-sticky-weight="1" data-height-limit="0" data-stickyness="sticky" data-geoloc-targets="" class="after-post-content-widget"><span style="display:none;">Java bottom</span> <div class="textwidget"><div class="short_box short_end">
+                <h3><b>Get started with Spring 5 and Spring Boot 2, through the <em>Learn Spring</em> course:</b></h3>
+                <strong><a href="/ls-course-end">&gt;&gt; CHECK OUT THE COURSE</a></strong>
+            </div></div>
+            </div></div><div data-sticky-weight="1" data-height-limit="0" data-stickyness="sticky" data-geoloc-targets="" class="widget_text after-post-banner-widget"><span style="display:none;">Generic footer banner</span><div class="textwidget custom-html-widget"><div class="footer-html-banner">
+            <img class="" width="800" height="360" src="/wp-content/uploads/2016/05/baeldung-rest-post-footer-main-1.2.0.jpg">
+            <div class="header-row">
+                <div class="image-col">
+                    <img class="" width="300" height="300" src="/wp-content/uploads/2016/05/baeldung-rest-post-footer-icn-1.0.0.png">
+                </div>
+                <div class="text-col">
+                    <div>Learning to build your API<br><strong>with Spring</strong>?</div>
+                    <a class="optin" href="/rest-api-spring-guide"><span class="optin-button">Download the E-book</span></a>
+                </div>
+            </div>
+        </div></div></div>
+        </section>
+
+    </article>
+    <div class="wpdiscuz_top_clearing"></div>
+    <div id="comments" class="comments-area"><div id="respond" style="width: 0;height: 0;clear: both;margin: 0;padding: 0;"></div> <div id="wpdcom" class="wpdiscuz_unauth wpd-default wpd-layout-1 wpd-comments-closed">
+        <div id="wpd-threads" class="wpd-thread-wrapper">
+            <div class="wpd-thread-head">
+                <div class="wpd-thread-info " data-comments-count="4">
+                    <span class="wpdtc" title="4">4</span> Comments </div>
+                <div class="wpd-space"></div>
+                <div class="wpd-thread-filter">
+                    <div class="wpd-filter wpdf-reacted wpd_not_clicked" wpd-tooltip="Most reacted comment"><i class="fas fa-bolt"></i></div>
+                    <div class="wpd-filter wpdf-hottest wpd_not_clicked" wpd-tooltip="Hottest comment thread"><i class="fas fa-fire"></i></div>
+                    <div class="wpd-filter wpdf-sorting">
+                        <span class="wpdiscuz-sort-button wpdiscuz-date-sort-asc wpdiscuz-sort-button-active" data-sorting="oldest">Oldest</span>
+                        <i class="fas fa-sort-down"></i>
+                        <div class="wpdiscuz-sort-buttons" style="display: none;">
+                            <span class="wpdiscuz-sort-button wpdiscuz-date-sort-desc" data-sorting="newest">Newest</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wpd-comment-info-bar">
+                <div class="wpd-current-view"><i class="fas fa-quote-left"></i> Inline Feedbacks</div>
+                <div class="wpd-filter-view-all">View all comments</div>
+            </div>
+            <div class="wpd-thread-list">
+                <div class="wpd-load-more-submit-wrap">
+                    <button name="submit" class="wpd-load-comments wpd-prim-button">
+                        View Comments </button>
+                </div>
+                <div class="wpdiscuz-comment-pagination" style="display:none;">
+                    <div class="wpd-load-more-submit-wrap">
+                        <button name="submit" data-lastparentid="0" class="wpd-load-more-submit wpd-loaded wpd-prim-button">
+                            Load More Comments </button>
+                    </div>
+                    <input id="wpdiscuzHasMoreComments" type="hidden" value="0">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="wpdiscuz-loading-bar" class="wpdiscuz-loading-bar-unauth"></div>
+    <div id="wpdiscuz-comment-message" class="wpdiscuz-comment-message-unauth"></div>
+    <span>Comments are closed on this article!</span>
+    <div class="code-block code-block-16" style="margin: 8px 0; clear: both;">
+        <div align="center" data-freestar-ad="__336x280 __336x280" id="baeldung_leaderboard_btf_2">
+            <script data-cfasync="false" type="text/javascript">
+                freestar.config.enabled_slots.push({ placementName: "baeldung_leaderboard_btf_2", slotId: "baeldung_leaderboard_btf_2" });
+            </script>
+        </div></div>
+</div>

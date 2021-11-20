@@ -39,7 +39,7 @@ public class DictionaryDetailController {
         } else {
             dictionaryDetailService.update(dictionaryDetail);
         }
-        return null;
+        return AjaxResponse.of();
     }
 
     /**
@@ -50,7 +50,7 @@ public class DictionaryDetailController {
     @DeleteMapping("/{id}")
     public AjaxResponse removeById(@PathVariable Long id) {
         dictionaryDetailService.remove(id);
-        return null;
+        return AjaxResponse.of();
     }
 
     /**
@@ -93,7 +93,7 @@ public class DictionaryDetailController {
     @PatchMapping
     public AjaxResponse batchRemove(@RequestBody List<Long> ids) {
         dictionaryDetailService.batchRemove(ids);
-        return null;
+        return AjaxResponse.of();
     }
 
 }

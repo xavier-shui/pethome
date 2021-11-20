@@ -42,7 +42,7 @@
     </select>
 
     <!--List<DictionaryType> queryData(DictionaryTypeQuery dictionaryTypeQuery);-->
-    <!--本打算弄好children，所以搞了resultMap-->
+    <!--本打算弄好类型下的所有明细，所以搞了resultMap-->
     <select id="queryData" resultMap="DictionaryTypeMap">
         SELECT
             *
