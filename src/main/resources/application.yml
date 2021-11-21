@@ -8,6 +8,17 @@ spring:
     host: smtp.yeah.net
     username: shuizhengwei@yeah.net
     password: ROZZDXKOPLOISFRJ
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-wait: 2000ms
+        min-idle: 0
+        max-idle: 8
+        max-active: 20
 
 mybatis:
   type-aliases-package: cn.xavier.org.domain,cn.xavier.org.query,
