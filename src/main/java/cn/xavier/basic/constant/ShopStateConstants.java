@@ -6,7 +6,7 @@ package cn.xavier.basic.constant;
  * @author Zheng-Wei Shui
  * @date 11/20/2021
  */
-public class StateConstants {
+public class ShopStateConstants {
     /**
      * 待提交
      */
@@ -26,5 +26,5 @@ public class StateConstants {
     /**
      * 拒绝，不可再次提交
      */
-    public static final int REFUSED = 4;
+    public static final int REFUSED = -1;
 }

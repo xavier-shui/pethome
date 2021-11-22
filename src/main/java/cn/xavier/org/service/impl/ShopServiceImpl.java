@@ -33,7 +33,7 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
         if (admin == null) {
             throw new BusinessException("管理员必需有");
         }
-        String[] parameters = {
+        String[] necessaryParameters = {
                 shop.getName(),
                 shop.getTel(),
                 shop.getAddress(),
@@ -42,11 +42,11 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
                 admin.getEmail(),
                 admin.getPassword()
         };
-        for (String parameter : parameters) {
+        for (String parameter : necessaryParameters) {
             if (StringUtils.isEmpty(parameter)) {
                 throw new BusinessException("必要参数不能为空");
             }
-        };
+        }
 
         // 密码一致性校验
         if (!admin.getPassword().equals(admin.getConfirmPassword())) {

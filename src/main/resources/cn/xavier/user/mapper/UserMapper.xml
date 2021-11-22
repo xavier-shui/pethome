@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xavier.user.mapper.UserMapper">
+
+    <!--void save(User user);-->
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_user (sn, name, dirPath, state, manager_id, parent_id)
+        VALUES (
+            #{sn},
+            #{name},
+            #{dirPath},
+            #{state},
+            #{manager.id},
+            #{parent.id}
+        )
+    </insert>
+
+    <!--void update(User user);-->
+    <update id="update">
+        UPDATE t_user SET
+            sn=#{sn},
+            name=#{name},
+            dirPath=#{dirPath},
+            state=#{state},
+            manager_id=#{manager.id},
+            parent_id=#{parent.id}
+        WHERE id = #{id}
+    </update>
+
+    <!--void delete(Long id);-->
+    <delete id="delete">
+        DELETE FROM t_user WHERE id = #{id}
+    </delete>
+
+    <!--User loadById(Long id);-->
+    <select id="loadById" resultType="User">
+        SELECT * FROM t_user WHERE id = #{id}
+    </select>
+
+    <!--List<User> loadAll();-->
+    <select id="loadAll" resultType="User">
+        SELECT * FROM t_user
+    </select>
+
+    <!--Long queryCount(UserQuery userQuery);-->
+    <select id="queryCount" resultType="long">
+        SELECT COUNT(1) FROM t_user d
+        <include refid="querySql"/>
+    </select>
+
+    <!--List<User> queryData(UserQuery userQuery);-->
+    <select id="queryData" resultMap="UserMap">
+        SELECT
+            d.*,
+            e.id eid,
+            e.username,
+            p.id pid,
+            p.NAME pname
+        FROM
+            t_user d
+            LEFT JOIN t_employee e ON d.manager_id = e.id
+            LEFT JOIN t_user p ON d.parent_id = p.id
+        <include refid="querySql"/>
+        LIMIT #{start}, #{pageSize}
+    </select>
+    
+    <sql id="querySql">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (d.sn LIKE CONCAT('%', #{keyword}, '%') OR d.name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="UserMap" type="User">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="dirPath" property="dirPath"/>
+        <result column="state" property="state"/>
+        <result column="manager_id" property="manager_id"/>
+        <result column="parent_id" property="parent_id"/>
+        <association property="manager" javaType="Employee">
+            <id column="eid" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="parent" javaType="User">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+        </association>
+    </resultMap>
+
+    <!--void batchDelete(List<Long> ids);-->
+    <delete id="batchDelete">
+        DELETE FROM t_user WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--User loadByPhone(String phone);-->
+    <select id="loadByPhone" resultType="User">
+        SELECT * FROM t_user WHERE phone = #{phone}
+    </select>
+</mapper>
