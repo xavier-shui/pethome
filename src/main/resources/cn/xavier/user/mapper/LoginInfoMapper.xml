@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xavier.user.mapper.LoginInfoMapper">
+
+    <!--void save(LoginInfo loginInfo);-->
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_logininfo (sn, name, dirPath, state, manager_id, parent_id)
+        VALUES (
+            #{sn},
+            #{name},
+            #{dirPath},
+            #{state},
+            #{manager.id},
+            #{parent.id}
+        )
+    </insert>
+
+    <!--void update(LoginInfo loginInfo);-->
+    <update id="update">
+        UPDATE t_logininfo SET
+            sn=#{sn},
+            name=#{name},
+            dirPath=#{dirPath},
+            state=#{state},
+            manager_id=#{manager.id},
+            parent_id=#{parent.id}
+        WHERE id = #{id}
+    </update>
+
+    <!--void delete(Long id);-->
+    <delete id="delete">
+        DELETE FROM t_logininfo WHERE id = #{id}
+    </delete>
+
+    <!--LoginInfo loadById(Long id);-->
+    <select id="loadById" resultType="LoginInfo">
+        SELECT * FROM t_logininfo WHERE id = #{id}
+    </select>
+
+    <!--List<LoginInfo> loadAll();-->
+    <select id="loadAll" resultType="LoginInfo">
+        SELECT * FROM t_logininfo
+    </select>
+
+    <!--Long queryCount(UserQuery logininfoQuery);-->
+    <select id="queryCount" resultType="long">
+        SELECT COUNT(1) FROM t_logininfo d
+        <include refid="querySql"/>
+    </select>
+
+    <!--List<LoginInfo> queryData(UserQuery logininfoQuery);-->
+    <select id="queryData" resultMap="UserMap">
+        SELECT
+            d.*,
+            e.id eid,
+            e.logininfoname,
+            p.id pid,
+            p.NAME pname
+        FROM
+            t_logininfo d
+            LEFT JOIN t_employee e ON d.manager_id = e.id
+            LEFT JOIN t_logininfo p ON d.parent_id = p.id
+        <include refid="querySql"/>
+        LIMIT #{start}, #{pageSize}
+    </select>
+    
+    <sql id="querySql">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (d.sn LIKE CONCAT('%', #{keyword}, '%') OR d.name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="UserMap" type="LoginInfo">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="dirPath" property="dirPath"/>
+        <result column="state" property="state"/>
+        <result column="manager_id" property="manager_id"/>
+        <result column="parent_id" property="parent_id"/>
+        <association property="manager" javaType="Employee">
+            <id column="eid" property="id"/>
+            <result column="logininfoname" property="logininfoname"/>
+        </association>
+        <association property="parent" javaType="LoginInfo">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+        </association>
+    </resultMap>
+
+    <!--void batchDelete(List<Long> ids);-->
+    <delete id="batchDelete">
+        DELETE FROM t_logininfo WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
