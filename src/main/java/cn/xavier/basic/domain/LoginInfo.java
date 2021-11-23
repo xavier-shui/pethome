@@ -1,6 +1,6 @@
-package cn.xavier.user.domain;
+package cn.xavier.basic.domain;
 
-import cn.xavier.basic.domain.BaseDomain;
+import cn.xavier.basic.constant.LoginInfoConstants;
 import lombok.Data;
 
 /**
@@ -20,5 +20,5 @@ public class LoginInfo extends BaseDomain {
     // 0 代表管理员 1 用户
     private Integer type;
     // 0 不可以用 1 可用
-    private Integer disable;
+    private Integer disable = LoginInfoConstants.ENABLED;
 }

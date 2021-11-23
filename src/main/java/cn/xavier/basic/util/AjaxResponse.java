@@ -2,6 +2,10 @@ package cn.xavier.basic.util;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  * 异步请求返回json对象
@@ -29,5 +33,23 @@ public class AjaxResponse {
     public AjaxResponse setResultObj(Object resultObj) {
         this.resultObj = resultObj;
         return this;
+    }
+
+    /**
+     * Failure response *
+     * 直接用response手动写输出流
+     * @param response response
+     */
+    @SneakyThrows
+    public static void failureResponse(HttpServletResponse response) {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        AjaxResponse failureResponseObj = AjaxResponse.of()
+                .setSuccess(false)
+                .setMessage("NotLoggedIn");
+        writer.println(DtoUtil.toJsonString(failureResponseObj));
+        writer.flush();
+        writer.close();
     }
 }

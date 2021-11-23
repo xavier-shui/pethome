@@ -6,6 +6,7 @@ import cn.xavier.org.domain.Employee;
 import cn.xavier.org.domain.Shop;
 import cn.xavier.org.mapper.EmployeeMapper;
 import cn.xavier.org.mapper.ShopMapper;
+import cn.xavier.org.service.IEmployeeService;
 import cn.xavier.org.service.IShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
 
     @Autowired
     private ShopMapper shopMapper;
+
+    @Autowired
+    private IEmployeeService employeeService;
 
     @Override
     @Transactional
@@ -54,21 +58,21 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
         }
 
         // 电话，邮箱，用户已注册校验
-        Employee adminInDB = employeeMapper.loadByAdmin(admin.getUsername(),
-                admin.getPhone(),
-                admin.getEmail());
+        Employee adminInDB = employeeMapper.loadByAdmin(admin);
         if (adminInDB != null) {
             throw new BusinessException("用户名、手机或邮箱已经存在，如果忘记密码，请找回");
         }
 
 
-        // 保存Employee, 返回自增主键
-        employeeMapper.save(admin);
+        // 保存admin, 返回自增主键
+        // 对应密码和loginInfo处理
+        employeeService.add(admin);
         // 保存Shop(必须有admin_id), 返回自增主键
         shop.setAdmin(admin);
         shopMapper.save(shop);
         // 修改Employee关联的shop_id
         admin.setShop_id(shop.getId());
+        // 不用更新loginInfo就不用调service
         employeeMapper.update(admin);
     }
 }

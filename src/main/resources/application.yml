@@ -24,6 +24,7 @@ mybatis:
   type-aliases-package: cn.xavier.org.domain,cn.xavier.org.query,
                         cn.xavier.system.domain,cn.xavier.system.query
                         cn.xavier.user.domain,cn.xavier.user.query
+                        cn.xavier.basic.domain,cn.xavier.basic.query
 
 logging:
   file: logs/application-debug.log

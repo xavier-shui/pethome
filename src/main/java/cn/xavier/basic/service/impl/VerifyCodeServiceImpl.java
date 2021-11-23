@@ -1,9 +1,8 @@
 package cn.xavier.basic.service.impl;
 
-import cn.xavier.basic.constant.RedisKeyConstants;
+import cn.xavier.basic.constant.RedisConstants;
 import cn.xavier.basic.exception.BusinessException;
 import cn.xavier.basic.service.IVerifyCodeService;
-import cn.xavier.basic.util.SmsUtil;
 import cn.xavier.basic.util.StrUtils;
 import cn.xavier.user.domain.User;
 import cn.xavier.user.mapper.UserMapper;
@@ -49,7 +48,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
 
 
         // 3. 该手机号是否已经生成过验证码
-        String key = RedisKeyConstants.USER_REGISTER_VERIFY_CODE_KEY_PREFIX + phone;
+        String key = RedisConstants.USER_REGISTER_VERIFY_CODE_KEY_PREFIX + phone;
         // verifyCode里面不用存时间戳
         String verifyCode = stringRedisTemplate.opsForValue().get(key);
         // The command returns -2 if the key does not exist.
@@ -58,7 +57,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
         // 3.1 是否已过重发时间
         if (ttlMinutes >= 2) {
             throw new BusinessException("至少需间隔一分钟再获取验证码!");
-        } else if (ttlMinutes == -2) { // 没生成过验证码或已过期
+        } else if (ttlMinutes == RedisConstants.KEY_DOES_NOT_EXIST) { // 没生成过验证码或已过期
             verifyCode = StrUtils.getRandomString(6);
             // 4. 保存验证码信息至redis， 验证码过期时间三分钟
             stringRedisTemplate.opsForValue().set(key, verifyCode, 3, TimeUnit.MINUTES);
