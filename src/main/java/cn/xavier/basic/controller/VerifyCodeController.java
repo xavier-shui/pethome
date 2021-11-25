@@ -21,10 +21,16 @@ public class VerifyCodeController {
     @Autowired
     private IVerifyCodeService verifyCodeService;
 
+    /**
+     * Send sms code
+     * 登录 注册 绑定 等都可以从这拿验证码
+     *
+     * @param params params
+     * @return the ajax response
+     */
     @PostMapping("/sendSmsCode")
-    public AjaxResponse sendSmsCode(@RequestBody Map<String, String> parameters) { // Map代替对象接收参数
-        String phone = parameters.get("phone");
-        verifyCodeService.sendSmsCode(phone);
+    public AjaxResponse sendSmsCode(@RequestBody Map<String, String> params) { // Map代替对象接收参数
+        verifyCodeService.sendSmsCode(params);
         return AjaxResponse.of();
     }
 }

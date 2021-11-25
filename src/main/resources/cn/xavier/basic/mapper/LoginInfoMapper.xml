@@ -113,4 +113,15 @@
     <select id="loadByLoginDto" resultType="LoginInfo">
         SELECT * FROM t_logininfo WHERE (username = #{username} OR phone = #{username} OR email = #{username}) AND type = #{type}
     </select>
+
+    <!--LoginInfo loadByUserId(Long userId);-->
+    <select id="loadByUserId" resultType="LoginInfo">
+        SELECT
+          l.*
+        FROM
+          t_user u
+          JOIN t_logininfo l ON u.logininfo_id = l.id
+        WHERE
+          u.id = #{userId}
+    </select>
 </mapper>

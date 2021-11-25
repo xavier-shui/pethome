@@ -1,7 +1,6 @@
 package cn.xavier.basic.mapper;
 
 import cn.xavier.basic.dto.LoginDto;
-import cn.xavier.basic.mapper.BaseMapper;
 import cn.xavier.basic.domain.LoginInfo;
 
 /**
@@ -18,4 +17,12 @@ public interface LoginInfoMapper extends BaseMapper<LoginInfo> {
      * @return the login info
      */
     LoginInfo loadByLoginDto(LoginDto loginDto);
+
+    /**
+     * Load by user id 更据用户id联表查loginInfo
+     *
+     * @param userId user id
+     * @return the login info
+     */
+    LoginInfo loadByUserId(Long userId);
 }

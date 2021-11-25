@@ -9,7 +9,7 @@ import org.csource.fastdfs.*;
 public class FastDfsUtil {
 
     //从classpath
-    public static String CONF_FILENAME  = FastDfsUtil.class.getClassLoader()
+    public static final String CONF_FILENAME  = FastDfsUtil.class.getClassLoader()
             .getResource("fastDfs_client.conf").getFile();
 
 

@@ -23,4 +23,5 @@ public class RedisTest extends BaseTest {
         // non null key required
         System.out.println(redisTemplate.getExpire("code", TimeUnit.MINUTES));
     }
+
 }

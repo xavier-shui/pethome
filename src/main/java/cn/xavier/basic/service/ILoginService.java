@@ -1,6 +1,8 @@
 package cn.xavier.basic.service;
 
+import cn.xavier.basic.dto.BinderDto;
 import cn.xavier.basic.dto.LoginDto;
+import cn.xavier.basic.util.AjaxResponse;
 
 import java.util.Map;
 
@@ -16,4 +18,20 @@ public interface ILoginService {
      * @return the map 前端要存到Storage
      */
     Map<String, String> account(LoginDto loginDto);
+
+    /**
+     * Wechat 微信登录
+     *
+     * @param code code
+     * @return the map
+     */
+    AjaxResponse wechat(String code);
+
+    /**
+     * Wechat binder 绑定微信账号至平台账号
+     *
+     * @param binderDto binder dto
+     * @return the ajax response
+     */
+    AjaxResponse wechatBinder(BinderDto binderDto);
 }

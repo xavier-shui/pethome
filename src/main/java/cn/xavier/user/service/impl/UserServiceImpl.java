@@ -1,20 +1,27 @@
 package cn.xavier.user.service.impl;
 
 import cn.xavier.basic.constant.LoginInfoConstants;
+import cn.xavier.basic.constant.RedisConstants;
+import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.basic.exception.BusinessException;
+import cn.xavier.basic.mapper.LoginInfoMapper;
 import cn.xavier.basic.service.impl.BaseServiceImpl;
 import cn.xavier.basic.util.DtoUtil;
 import cn.xavier.basic.util.MD5Utils;
+import cn.xavier.basic.util.RedisUtil;
 import cn.xavier.basic.util.StrUtils;
-import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.user.domain.User;
 import cn.xavier.user.dto.UserDto;
-import cn.xavier.basic.mapper.LoginInfoMapper;
 import cn.xavier.user.mapper.UserMapper;
 import cn.xavier.user.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import static cn.xavier.basic.constant.SmsCodeTypeConstants.REGISTER;
+import static cn.xavier.basic.util.TypeConverterUtils.toLoginInfo;
 
 /**
  * @author Zheng-Wei Shui
@@ -29,6 +36,12 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
     @Autowired
     private LoginInfoMapper loginInfoMapper;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
 
     @Override
     public void registerByPhone(UserDto userDto) {
@@ -37,11 +50,18 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
             throw new BusinessException("必要参数不能为空!");
         }
 
+
+
         // 是否已经注册校验
         User userinDb = userMapper.loadByPhone(userDto.getPhone());
         if (userinDb != null) {
             throw new BusinessException("该手机号已经注册过!");
         }
+
+        // 验证码校验
+        redisUtil.verifyCodeCheck(RedisConstants.getSmsCodeKeyPrefix(REGISTER) + userDto.getPhone(),
+                userDto.getVerifyCode());
+
 
         // 两次密码一致性校验
         if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
@@ -51,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
         // 生成User对象, 它的字段多，先生成，方便复制到LoginInfo
         User user = userDto2User(userDto);
         // 生成LoginInfo对象
-        LoginInfo loginInfo = user2LoginInfo(user);
+        LoginInfo loginInfo = toLoginInfo(user);
 
         // 保存到t_logininfo表, ID有用需返回
         loginInfoMapper.save(loginInfo);
@@ -77,22 +97,17 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
         return user;
     }
 
-    private LoginInfo user2LoginInfo(User user) {
-        LoginInfo loginInfo = new LoginInfo();
-        BeanUtils.copyProperties(user, loginInfo);
-        // 设置类型
-        loginInfo.setType(LoginInfoConstants.USER);
-        return loginInfo;
-    }
 
-    // TODO update 和 remove 需要关联修改t_logininfo表
+    // update 和 remove 需要关联修改t_logininfo表
     @Override
     public void update(User user) {
+        loginInfoMapper.update(toLoginInfo(user));
         super.update(user);
     }
 
     @Override
     public void remove(Long id) {
+        loginInfoMapper.delete(userMapper.loadById(id).getLogininfo_id());
         super.remove(id);
     }
 }

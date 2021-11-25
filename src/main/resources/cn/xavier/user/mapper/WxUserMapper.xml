@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.user.mapper.WxUserMapper">
+
+    <!--//添加一条数据
+    void save(WxUser user);-->
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+       INSERT INTO t_wxuser(
+            openid,
+            nickname,
+            sex,
+            address,
+            headimgurl,
+            unionid,
+            user_id
+       ) VALUES (
+            #{openid},
+            #{nickname},
+            #{sex},
+            #{address},
+            #{headimgurl},
+            #{unionid},
+            #{user_id}
+       )
+    </insert>
+
+    <!--//更新一条数据
+    void update(WxUser user);-->
+    <update id="update">
+        UPDATE t_wxuser SET
+            openid=#{openid},
+            nickname=#{nickname},
+            sex=#{sex},
+            address=#{address},
+            headimgurl=#{headimgurl},
+            unionid=#{unionid},
+            user_id=#{user_id},
+        WHERE id = #{id}
+    </update>
+
+   <!-- //根据Id删除数据
+    void delete(Long id);-->
+    <delete id="delete" parameterType="long">
+        DELETE FROM t_wxuser WHERE id = #{id}
+    </delete>
+
+    <!--//根据Id查询一条数据
+    WxUser loadById(Long id);-->
+    <select id="loadById" parameterType="long" resultType="WxUser">
+        SELECT * FROM t_wxuser WHERE id = #{id}
+    </select>
+
+
+    <!--//查询所有数据
+    List<WxUser> loadAll();-->
+    <select id="loadAll" resultType="WxUser">
+        SELECT * FROM t_wxuser
+    </select>
+
+    <!--WxUser loadByOpenId(String openid);-->
+    <select id="loadByOpenId" parameterType="string" resultType="WxUser">
+        SELECT * FROM t_wxuser WHERE openid = #{openid}
+    </select>
+    
+
+</mapper>

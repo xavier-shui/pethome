@@ -13,7 +13,10 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static cn.xavier.basic.constant.SmsCodeTypeConstants.*;
 
 /**
  * @author Zheng-Wei Shui
@@ -29,26 +32,46 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public void sendSmsCode(String phone) {
+    public void sendSmsCode(Map<String, String> params) {
         // 1. 参数校验
-        if (StringUtils.isEmpty(phone)) {
-            throw new BusinessException("手机号不能为空!");
+        String phone = params.get("phone");
+        String type = params.get("type");
+        if (!StringUtils.hasLength(phone)
+                || !StringUtils.hasLength(type)) {
+            throw new BusinessException("必要参数不能为空!");
         }
+
         String regex = "^1[345789]\\d{9}$";
         if (!phone.matches(regex)) {
             throw new BusinessException("手机号格式不正确!");
         }
 
+        // 同一个手机号不同业务类型的业务键搞成不一样
+        String businessKey = null;
+        if (REGISTER.equals(type)) {
+            // 2. 已注册校验
+            User user = userMapper.loadByPhone(phone);
+            if (user != null) {
+                throw new BusinessException("手机号已被注册!");
+            }
+            businessKey = RedisConstants.getSmsCodeKeyPrefix(REGISTER) + phone;
 
-        // 2. 已注册校验
-        User user = userMapper.loadByPhone(phone);
-        if (user != null) {
-            throw new BusinessException("手机号已被注册!");
+        } else if (BINDER.equals(type)) {
+            businessKey = RedisConstants.getSmsCodeKeyPrefix(BINDER) + phone;
         }
 
+        saveToRedisAndSendSms(phone, businessKey);
 
+    }
+
+
+    /**
+     * 保存验证码到redis，并且发送给客户
+     * @param phone
+     * @param key
+     */
+    private void saveToRedisAndSendSms(String phone, String key) {
         // 3. 该手机号是否已经生成过验证码
-        String key = RedisConstants.USER_REGISTER_VERIFY_CODE_KEY_PREFIX + phone;
         // verifyCode里面不用存时间戳
         String verifyCode = stringRedisTemplate.opsForValue().get(key);
         // The command returns -2 if the key does not exist.
@@ -65,10 +88,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
             // 就用原来的验证码延长有效期
             stringRedisTemplate.expire(key, 3, TimeUnit.MINUTES);
         }
-
-
         // 5. 发送短信(为避免接收短信延迟导致客户输入过期验证码，写明过期时间)
-        // 测试网建平台过了6分钟才收到短信
         // 指定日期时间格式
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // 提醒客户验证码失效时间, 秒级精度还是能保证的

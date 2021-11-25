@@ -19,11 +19,11 @@ public class PetHomeMvcConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/swagger-ui.html")
-                .excludePathPatterns("/swagger-resources/**") // swagger base
+                .excludePathPatterns("/swagger-resources/**","/webjars/**","/v2/**","/swagger-ui.html/**")
                 .excludePathPatterns("/fastDfs/**")
                 .excludePathPatterns("/login/**")
-                .excludePathPatterns("user/registerByPhone")
+                .excludePathPatterns("/user/registerByPhone")
+                .excludePathPatterns("/error") // 错误页面
                 .excludePathPatterns("/verifyCode/**");
     }
 }

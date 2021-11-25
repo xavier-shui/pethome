@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Component
 @Aspect
 @Slf4j
-public class DMLRequestManager {
+public class AjaxResponseManager {
 
     /**
      * @param
