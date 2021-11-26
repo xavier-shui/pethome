@@ -12,16 +12,16 @@ import java.util.Arrays;
 
 /**
  * 新增,修改和删除数据请求的切面公共代码
+ *
  * @author Zheng-Wei Shui
  * @date 11/13/2021
  */
 @Component
 @Aspect
 @Slf4j
-public class DMLRequestManager {
+public class AjaxResponseManager {
 
     /**
-     *
      * @param
      * @return the json response  切面的返回值可以相同或是子类型
      */

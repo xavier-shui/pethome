@@ -5,26 +5,45 @@
 
     <!--void save(User user);-->
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO t_user (sn, name, dirPath, state, manager_id, parent_id)
+        INSERT INTO t_user (
+            username,
+            email,
+            phone,
+            salt,
+            password,
+            state,
+            age,
+            createtime,
+            headImg,
+            logininfo_id
+        )
         VALUES (
-            #{sn},
-            #{name},
-            #{dirPath},
-            #{state},
-            #{manager.id},
-            #{parent.id}
+           #{username},
+           #{email},
+           #{phone},
+           #{salt},
+           #{password},
+           #{state},
+           #{age},
+           #{createtime},
+           #{headImg},
+           #{logininfo_id}
         )
     </insert>
 
     <!--void update(User user);-->
     <update id="update">
         UPDATE t_user SET
-            sn=#{sn},
-            name=#{name},
-            dirPath=#{dirPath},
-            state=#{state},
-            manager_id=#{manager.id},
-            parent_id=#{parent.id}
+            username = #{username},
+            email = #{email},
+            phone = #{phone},
+            salt = #{salt},
+            password = #{password},
+            state = #{state},
+            age = #{age},
+            createtime = #{createtime},
+            headImg = #{headImg},
+            logininfo_id = #{logininfo_id}
         WHERE id = #{id}
     </update>
 

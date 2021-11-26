@@ -19,6 +19,8 @@ public class GlobalCorsConfig {
         config.addAllowedOrigin("http://localhost:80");
         config.addAllowedOrigin("http://127.0.0.1");
         config.addAllowedOrigin("http://localhost");
+        config.addAllowedOrigin("http://bugtracker.itsource.cn"); // 微信扫描登录回调域
+        config.addAllowedOrigin("http://bugtracker.itsource.cn:8081"); // 后台系统也可以访问
 
 
         //2) 是否发送Cookie信息

@@ -1,7 +1,6 @@
-package cn.xavier.user.service;
+package cn.xavier.basic.service;
 
-import cn.xavier.basic.service.IBaseService;
-import cn.xavier.user.domain.LoginInfo;
+import cn.xavier.basic.domain.LoginInfo;
 
 /**
  * 业务层

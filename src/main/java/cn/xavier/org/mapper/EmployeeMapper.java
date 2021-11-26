@@ -17,7 +17,5 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
      * @param
      * @return the employee
      */
-    Employee loadByAdmin(@Param("username") String username,
-                         @Param("phone") String phone,
-                         @Param("email") String email);
+    Employee loadByAdmin(Employee admin);
 }

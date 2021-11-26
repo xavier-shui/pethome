@@ -1,8 +1,7 @@
-package cn.xavier.user.service.impl;
+package cn.xavier.basic.service.impl;
 
-import cn.xavier.basic.service.impl.BaseServiceImpl;
-import cn.xavier.user.domain.LoginInfo;
-import cn.xavier.user.service.ILoginInfoService;
+import cn.xavier.basic.domain.LoginInfo;
+import cn.xavier.basic.service.ILoginInfoService;
 import org.springframework.stereotype.Service;
 
 /**

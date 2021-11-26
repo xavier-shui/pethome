@@ -20,6 +20,8 @@ public class RedisTest extends BaseTest {
         // redisTemplate.opsForValue().set("code", "2345", 90, TimeUnit.SECONDS);
         System.out.println(redisTemplate.opsForValue().get("code"));
         // 不足一分钟直接返回0
+        // non null key required
         System.out.println(redisTemplate.getExpire("code", TimeUnit.MINUTES));
     }
+
 }

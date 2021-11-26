@@ -1,5 +1,7 @@
 package cn.xavier.basic.service;
 
+import java.util.Map;
+
 /**
  * 验证码业务
  * @author Zheng-Wei Shui
@@ -9,7 +11,7 @@ public interface IVerifyCodeService {
     /**
      * Send sms code 给手机发验证码
      *
-     * @param phone 手机号
+     * @param params 手机号 和 验证码类型
      */
-    void sendSmsCode(String phone);
+    void sendSmsCode(Map<String, String> params);
 }
