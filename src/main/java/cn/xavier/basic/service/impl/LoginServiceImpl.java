@@ -136,8 +136,7 @@ public class LoginServiceImpl implements ILoginService {
                 binderDto.getVerifyCode());
 
         // 获取用户在微信平台的个人信息, 用来生成t_wxuser表
-        String userInfoUrl = WechatConstants.getSpecifiedUserInfoUrl(binderDto.getAccessToken(), binderDto
-                .getOpenId());
+        String userInfoUrl = WechatConstants.getSpecifiedUserInfoUrl(binderDto.getAccessToken(), binderDto.getOpenId());
         String userInfoResult = HttpClientUtils.httpGet(userInfoUrl);
         // JSON字符串直接映射到指定类的对象
         WxUser wxUser = JSONObject.parseObject(userInfoResult, WxUser.class);

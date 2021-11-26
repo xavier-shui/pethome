@@ -18,4 +18,6 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
      * @return the employee
      */
     Employee loadByAdmin(Employee admin);
+
+    Employee loadByLoginInfoId(Long loginInfoId);
 }

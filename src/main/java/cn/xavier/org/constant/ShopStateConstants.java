@@ -1,4 +1,4 @@
-package cn.xavier.basic.constant;
+package cn.xavier.org.constant;
 
 /**
  * 状态常量
