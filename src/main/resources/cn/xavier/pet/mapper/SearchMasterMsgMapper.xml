@@ -1,0 +1,130 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.pet.mapper.SearchMasterMsgMapper">
+    <select id="loadById" parameterType="long" resultType="SearchMasterMsg">
+        select * from t_search_master_msg where id = #{id}
+    </select>
+    <select id="loadAll" resultType="SearchMasterMsg">
+        select * from t_search_master_msg
+    </select>
+   <insert id="save" parameterType="SearchMasterMsg">
+       insert into t_search_master_msg(
+            name,
+            price,
+            age,
+            gender,
+            coat_color,
+            resources,
+            pet_type,
+            address,
+            title,
+            state,
+            user_id,
+            shop_id
+
+       )
+       VALUES (
+           #{name},
+           #{price},
+           #{age},
+           #{gender},
+           #{coat_color},
+           #{resources},
+           #{pet_type},
+           #{address},
+           #{title},
+           #{state},
+           #{user_id},
+           #{shop_id}
+       )
+   </insert>
+
+    <update id="update" parameterType="SearchMasterMsg">
+        update t_search_master_msg SET
+            name=#{name},
+            price=#{price},
+            age=#{age},
+            gender=#{gender},
+            coat_color=#{coat_color},
+            resources=#{resources},
+            pet_type=#{pet_type},
+            address=#{address},
+            title=#{title},
+            state=#{state},
+            user_id=#{user_id},
+            shop_id=#{shop_id}
+         where id = #{id}
+
+    </update>
+
+    <sql id="whereSql">
+        <where>
+            <if test="state!=null">
+               and a.state = #{state}
+            </if>
+            <if test="user_id!=null">
+               and a.user_id = #{user_id}
+            </if>
+            <if test="shop_id!=null">
+              and  a.shop_id = #{shop_id}
+            </if>
+            <if test="keyword!=null and keyword!=''">
+              and  a.name LIKE CONCAT("%", #{keyword}, "%") OR a.title LIKE CONCAT("%", #{keyword}, "%")
+            </if>
+        </where>
+    </sql>
+    <!--//查询总条数-->
+    <!--Long queryCount(BaseQuery query);-->
+    <select id="queryCount" parameterType="SearchMasterMsgQuery" resultType="long">
+        select count(*) from t_search_master_msg a
+        <include refid="whereSql"/>
+    </select>
+    <!--//查询数据-->
+    <!--List<T> queryData(BaseQuery query);-->
+    <select id="queryData" parameterType="SearchMasterMsgQuery" resultMap="SearchMasterMsgMap">
+        SELECT
+            a.*, u.id uid,
+            u.username,
+            s.id sid,
+            s. NAME sname,
+            t.id tid,
+            t.name tname
+        FROM
+            t_search_master_msg a
+        LEFT JOIN t_user u ON u.id = a.user_id
+        LEFT JOIN t_shop s ON s.id = a.shop_id
+        LEFT JOIN t_pet_type t on t.id = a.pet_type
+        <include refid="whereSql"/>
+        limit #{start},#{pageSize}
+    </select>
+    <resultMap id="SearchMasterMsgMap" type="SearchMasterMsg">
+         <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="price" column="price"></result>
+        <result property="age" column="age"></result>
+        <result property="gender" column="gender"></result>
+        <result property="coat_color" column="coat_color"></result>
+        <result property="resources" column="resources"></result>
+        <result property="address" column="address"></result>
+        <result property="title" column="title"></result>
+        <result property="state" column="state"></result>
+        <association property="type" javaType="PetType">
+            <id property="id" column="tid"></id>
+            <result property="name" column="tname"></result>
+        </association>
+        <association property="user" javaType="User">
+            <id property="id" column="uid"></id>
+            <result property="username" column="username"></result>
+        </association>
+        <association property="shop" javaType="Shop">
+            <id property="id" column="sid"></id>
+            <result property="name" column="sname"></result>
+        </association>
+    </resultMap>
+
+    <!--void updateState2ProcessedById(Long search_master_msg_id);-->
+    <select id="updateState2ProcessedById">
+        UPDATE t_search_master_msg SET state = 1 WHERE id = #{search_master_msg_id}
+    </select>
+</mapper>

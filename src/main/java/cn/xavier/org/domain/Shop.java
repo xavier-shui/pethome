@@ -1,6 +1,6 @@
 package cn.xavier.org.domain;
 
-import cn.xavier.basic.constant.ShopStateConstants;
+import cn.xavier.org.constant.ShopStateConstants;
 import cn.xavier.basic.domain.BaseDomain;
 import lombok.Data;
 

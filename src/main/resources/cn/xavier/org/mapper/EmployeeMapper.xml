@@ -124,4 +124,9 @@
             username = #{username} OR phone = #{phone} OR email = #{email}
         LIMIT 1
     </select>
+
+    <!--Employee loadByLoginInfoId(Long loginInfoId);-->
+    <select id="loadByLoginInfoId" resultType="Employee">
+        SELECT * FROM t_employee WHERE logininfo_id = #{loginInfoId}
+    </select>
 </mapper>

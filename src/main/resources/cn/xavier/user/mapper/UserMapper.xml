@@ -122,4 +122,9 @@
     <select id="loadByPhone" resultType="User">
         SELECT * FROM t_user WHERE phone = #{phone}
     </select>
+
+    <!--User loadByLoginInfoId(Long loginInfoid)-->
+    <select id="loadByLoginInfoId" resultType="User">
+        SELECT * FROM t_user WHERE logininfo_id = #{loginInfoid}
+    </select>
 </mapper>

@@ -1,0 +1,25 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.pet.mapper.PetDetailMapper">
+
+    <insert id="save" parameterType="PetDetail">
+        insert into t_pet_detail(pet_id,intro,adoptNotice) VALUES (
+        #{pet_id},#{intro},#{adoptNotice}
+        )
+    </insert>
+
+    <!--petDetailMapper.updateByPetId(detail);-->
+    <update id="updateByPetId" parameterType="PetDetail">
+        UPDATE t_pet_detail set intro=#{intro},adoptNotice=#{adoptNotice}
+        where pet_id = #{pet_id}
+    </update>
+    <select id="loadByPetId" resultType="PetDetail" parameterType="long">
+        SELECT * from t_pet_detail where pet_id = #{petId}
+    </select>
+
+
+    <delete id="removeByPetId" parameterType="long">
+        delete from t_pet_detail where pet_id = #{petId}
+    </delete>
+</mapper>

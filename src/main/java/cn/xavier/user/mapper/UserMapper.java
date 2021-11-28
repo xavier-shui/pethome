@@ -17,4 +17,12 @@ public interface UserMapper extends BaseMapper<User> {
      * @return the user
      */
     User loadByPhone(String phone);
+
+    /**
+     * Load by logininfo id
+     *
+     * @param loginInfoid login infoid
+     * @return the user
+     */
+    User loadByLoginInfoId(Long loginInfoid);
 }

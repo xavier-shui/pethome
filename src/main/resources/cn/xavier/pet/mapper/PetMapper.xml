@@ -1,0 +1,177 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.pet.mapper.PetMapper">
+
+    <select id="loadById" parameterType="long" resultType="Pet">
+        select * from t_pet where id = #{id}
+    </select>
+
+    <!--void batchOnOrOffTheMarket(Map<String, Object> params);-->
+    <update id="batchOnOrOffTheMarket" parameterType="map">
+        UPDATE t_pet SET state = #{state},
+        <choose>
+            <when test="state == 0">
+                offsaletime = #{date}
+            </when>
+            <otherwise>
+                onsaletime = #{date}
+            </otherwise>
+        </choose>
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <insert id="save" parameterType="Pet" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_pet
+        (
+            name,
+            resources,
+            saleprice,
+            offsaletime,
+            onsaletime,
+            state,
+            costprice,
+            createtime,
+            type_id,
+            shop_id,
+            user_id,
+             search_master_msg_id
+        )
+        values (
+           #{ name},
+           #{ resources},
+           #{ saleprice},
+           #{ offsaletime},
+           #{ onsaletime},
+           #{ state},
+           #{ costprice},
+           #{ createtime},
+           #{ type_id},
+           #{ shop_id},
+           #{ user_id},
+           #{  search_master_msg_id}
+        )
+    </insert>
+    <update id="update" parameterType="Pet">
+
+        update t_pet set
+        name          = #{name},
+        resources= #{resources},
+        saleprice= #{saleprice},
+        offsaletime= #{offsaletime},
+        onsaletime= #{onsaletime},
+        state= #{state},
+        costprice= #{costprice},
+        createtime= #{createtime},
+        type_id= #{type_id},
+        shop_id= #{shop_id},
+        user_id= #{user_id},
+        search_master_msg_id= #{search_master_msg_id}
+        where id = #{id}
+    </update>
+    <delete id="remove" parameterType="long">
+        DELETE from t_pet where id=#{id}
+    </delete>
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and p.name like concat('%',#{keyword},'%')
+            </if>
+            <if test="state!=null">
+                and p.state = #{state}
+            </if>
+        </where>
+    </sql>
+    <!--//查询总条数-->
+    <!--Long queryCount(BaseQuery query);-->
+    <select id="queryCount" resultType="long" parameterType="PetQuery">
+        select count(*) from t_pet p
+        <include refid="whereSql"/>
+    </select>
+    <!--//查询数据-->
+    <!--List<T> queryData(BaseQuery query);-->
+    <select id="queryData" parameterType="PetQuery" resultMap="petMap1">
+        SELECT
+        p.*, t.id tid,
+        t. NAME tname,
+        s.id sid,
+        s. NAME sname,
+        u.id uid,
+        u.username
+        FROM
+        t_pet p
+        LEFT JOIN t_pet_type t ON p.type_id = t.id
+        LEFT JOIN t_shop s ON p.shop_id = s.id
+        LEFT JOIN t_user u ON p.user_id = u.id
+         <include refid="whereSql"/>
+         limit #{start},#{pageSize}
+    </select>
+
+    <resultMap id="petMap1" type="Pet">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="resources" column="resources"></result>
+        <result property="saleprice" column="saleprice"></result>
+        <result property="costprice" column="costprice"></result>
+        <result property="offsaletime" column="offsaletime"></result>
+        <result property="onsaletime" column="onsaletime"></result>
+        <result property="state" column="state"></result>
+        <result property="createtime" column="createtime"></result>
+        <association property="type" javaType="PetType">
+            <id property="id" column="tid"></id>
+            <result property="name" column="tname"></result>
+        </association>
+        <association property="shop" javaType="Shop">
+            <id property="id" column="sid"></id>
+            <result property="name" column="sname"></result>
+        </association>
+        <association property="user" javaType="User">
+            <id property="id" column="uid"></id>
+            <result property="username" column="username"></result>
+        </association>
+    </resultMap>
+
+
+    <!--select * from t_pet p left join t_pet_detail pd on p.id = pd.pet_id where p.id = #{id}-->
+    <!--AND p.state = 1 用来防止客户回退到已领养宠物页面 -->
+    <!--Pet loadDetailById(Long id)-->
+    <select id="loadDetailById" parameterType="long" resultMap="petMap">
+        SELECT p.*,
+            pd.id pdid, pd.adoptNotice, pd.intro,
+            s.id sid, s.name sname
+        FROM
+            t_pet p
+        LEFT JOIN t_pet_detail pd ON p.id = pd.pet_id
+        LEFT JOIN t_shop s ON p.shop_id = s.id
+        where p.id = #{id} AND p.state = 1
+    </select>
+    <resultMap id="petMap" type="Pet">
+
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="resources" column="resources"></result>
+        <result property="saleprice" column="saleprice"></result>
+        <result property="costprice" column="costprice"></result>
+        <result property="offsaletime" column="offsaletime"></result>
+        <result property="onsaletime" column="onsaletime"></result>
+        <result property="state" column="state"></result>
+        <result property="createtime" column="createtime"></result>
+        <result property="shop_id" column="shop_id"></result>
+        <result property="user_id" column="user_id"></result>
+        <result property="search_master_msg_id" column="search_master_msg_id"></result>
+        <!--private PetDetail detail = new PetDetail();-->
+        <association property="detail" javaType="PetDetail">
+            <id property="id" column="pdid"></id>
+            <result property="intro" column="intro"></result>
+            <result property="adoptNotice" column="adoptNotice"></result>
+        </association>
+        <association property="shop" javaType="Shop">
+            <id property="id" column="sid"></id>
+            <result property="name" column="sname"></result>
+        </association>
+    </resultMap>
+</mapper>
