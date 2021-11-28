@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -42,9 +41,9 @@ public class PetController {
     @PostMapping({"/onsale", "/offsale"})
     public AjaxResponse batchOnOrOffTheMarket(@RequestBody List<Long> ids, HttpServletRequest request) {
         if (request.getRequestURI().contains("onsale")) {
-            petService.batchOnOrOffTheMarket(ids, PetStateConstants.ON_THE_MARKET, new Date());
+            petService.batchOnOrOffTheMarket(ids, PetStateConstants.ON_THE_MARKET);
         } else {
-            petService.batchOnOrOffTheMarket(ids, PetStateConstants.OFF_THE_MARKET, new Date());
+            petService.batchOnOrOffTheMarket(ids, PetStateConstants.OFF_THE_MARKET);
         }
         return AjaxResponse.of();
     }
