@@ -69,6 +69,9 @@
             <if test="shop_id!=null">
               and  a.shop_id = #{shop_id}
             </if>
+            <if test="keyword!=null and keyword!=''">
+              and  a.name LIKE CONCAT("%", #{keyword}, "%") OR a.title LIKE CONCAT("%", #{keyword}, "%")
+            </if>
         </where>
     </sql>
     <!--//查询总条数-->
@@ -119,4 +122,9 @@
             <result property="name" column="sname"></result>
         </association>
     </resultMap>
+
+    <!--void updateState2ProcessedById(Long search_master_msg_id);-->
+    <select id="updateState2ProcessedById">
+        UPDATE t_search_master_msg SET state = 1 WHERE id = #{search_master_msg_id}
+    </select>
 </mapper>

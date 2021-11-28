@@ -3,6 +3,7 @@ package cn.xavier.pet.service;
 import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.basic.service.IBaseService;
 import cn.xavier.basic.util.PageList;
+import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.domain.SearchMasterMsg;
 import cn.xavier.pet.query.SearchMasterMsgQuery;
 
@@ -25,4 +26,11 @@ public interface ISearchMasterMsgService extends IBaseService<SearchMasterMsg> {
      * @return the page list
      */
     PageList<SearchMasterMsg> list(SearchMasterMsgQuery query, LoginInfo loginInfo);
+
+    /**
+     *  后台处理寻主消息
+     *
+     * @param pet pet
+     */
+    void handle(Pet pet);
 }

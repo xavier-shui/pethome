@@ -6,9 +6,13 @@ import cn.xavier.pet.domain.Pet;
 import java.util.Map;
 
 public interface PetMapper extends BaseMapper<Pet> {
-    void onsale(Map<String, Object> params);
 
-    void offSale(Map<String, Object> params);
+    Pet loadDetailById(Long id);
 
-    Pet loadByIdDetail(Long id);
+    /**
+     * Batch on or off the market
+     *
+     * @param params params
+     */
+    void batchOnOrOffTheMarket(Map<String, Object> params);
 }

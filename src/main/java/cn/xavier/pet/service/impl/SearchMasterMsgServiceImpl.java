@@ -8,14 +8,17 @@ import cn.xavier.basic.util.PageList;
 import cn.xavier.org.domain.Shop;
 import cn.xavier.org.mapper.EmployeeMapper;
 import cn.xavier.org.mapper.ShopMapper;
+import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.domain.SearchMasterMsg;
 import cn.xavier.pet.mapper.SearchMasterMsgMapper;
 import cn.xavier.pet.query.SearchMasterMsgQuery;
+import cn.xavier.pet.service.IPetService;
 import cn.xavier.pet.service.ISearchMasterMsgService;
 import cn.xavier.user.domain.User;
 import cn.xavier.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SearchMasterMsgServiceImpl extends BaseServiceImpl<SearchMasterMsg> implements ISearchMasterMsgService {
@@ -32,7 +35,11 @@ public class SearchMasterMsgServiceImpl extends BaseServiceImpl<SearchMasterMsg>
     @Autowired
     private EmployeeMapper employeeMapper;
 
+    @Autowired
+    private IPetService petService;
+
     @Override
+    @Transactional
     public void publish(SearchMasterMsg searchMasterMsg, LoginInfo loginInfo) {
         // 参数校验
 
@@ -56,6 +63,16 @@ public class SearchMasterMsgServiceImpl extends BaseServiceImpl<SearchMasterMsg>
             query.setUser_id(userMapper.loadByLoginInfoId(loginInfo.getId()).getId());
         }
         return super.queryPage(query);
+    }
+
+    @Override
+    @Transactional
+    public void handle(Pet pet) {
+        // 修改消息状态
+        searchMasterMsgMapper.updateState2ProcessedById(pet.getSearch_master_msg_id());
+        // 生成宠物和宠物详情，交给IPetService
+        petService.add(pet);
+
     }
 //    private PetAcquisitionOrder pet2order(Pet pet, SearchMasterMsg adopt) {
 //        PetAcquisitionOrder order = new PetAcquisitionOrder();

@@ -3,6 +3,7 @@ package cn.xavier.pet.controller;
 import cn.xavier.basic.util.AjaxResponse;
 import cn.xavier.basic.util.LoginContext;
 import cn.xavier.basic.util.PageList;
+import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.domain.SearchMasterMsg;
 import cn.xavier.pet.query.SearchMasterMsgQuery;
 import cn.xavier.pet.service.ISearchMasterMsgService;
@@ -46,6 +47,18 @@ public class SearchMasterMsgController {
     @PostMapping("/list")
     public PageList<SearchMasterMsg> list(@RequestBody SearchMasterMsgQuery query, HttpServletRequest request) {
         return seachMasterMsgService.list(query, LoginContext.getLoginInfo(request));
+    }
+
+    /**
+     * 后台处理寻主消息
+     *
+     * @param pet pet
+     * @return the ajax response
+     */
+    @PutMapping("/handle")
+    public AjaxResponse handle(@RequestBody Pet pet) {
+        seachMasterMsgService.handle(pet);
+        return AjaxResponse.of();
     }
 
     @GetMapping

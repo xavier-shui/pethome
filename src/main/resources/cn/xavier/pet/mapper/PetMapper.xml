@@ -6,18 +6,19 @@
     <select id="loadById" parameterType="long" resultType="Pet">
         select * from t_pet where id = #{id}
     </select>
-    <!--//update t_pet set onsaleTime = xx and state = 1 where id in(1,2,3)-->
-    <!--void onsale(Map<String, Object> params);-->
-    <update id="onsale" parameterType="map">
-        update t_pet set onsaletime = #{onsaleTime},state = 1 where id in
-        <foreach collection="ids" item="id" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
-    </update>
-    <!--//update t_pet set offsaleTime = xx and state = 0 where id in(1,2,3)-->
-    <!--void offSale(Map<String, Object> params);-->
-    <update id="offSale" parameterType="map">
-        update t_pet set offsaletime = #{offsaleTime},state = 0 where id in
+
+    <!--void batchOnOrOffTheMarket(Map<String, Object> params);-->
+    <update id="batchOnOrOffTheMarket" parameterType="map">
+        UPDATE t_pet SET state = #{state},
+        <choose>
+            <when test="state == 0">
+                offsaletime = #{date}
+            </when>
+            <otherwise>
+                onsaletime = #{date}
+            </otherwise>
+        </choose>
+        WHERE id IN
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -37,7 +38,7 @@
             type_id,
             shop_id,
             user_id,
-             adopt_id
+             search_master_msg_id
         )
         values (
            #{ name},
@@ -51,7 +52,7 @@
            #{ type_id},
            #{ shop_id},
            #{ user_id},
-           #{  adopt_id}
+           #{  search_master_msg_id}
         )
     </insert>
     <update id="update" parameterType="Pet">
@@ -68,7 +69,7 @@
         type_id= #{type_id},
         shop_id= #{shop_id},
         user_id= #{user_id},
-        adopt_id= #{adopt_id}
+        search_master_msg_id= #{search_master_msg_id}
         where id = #{id}
     </update>
     <delete id="remove" parameterType="long">
@@ -77,8 +78,8 @@
 
     <sql id="whereSql">
         <where>
-            <if test="keywords!=null and keywords!=''">
-                and p.name like concat('%',#{keywords},'%')
+            <if test="keyword!=null and keyword!=''">
+                and p.name like concat('%',#{keyword},'%')
             </if>
             <if test="state!=null">
                 and p.state = #{state}
@@ -136,18 +137,17 @@
 
 
     <!--select * from t_pet p left join t_pet_detail pd on p.id = pd.pet_id where p.id = #{id}-->
-    <!--Pet loadByIdDetail(Long id);-->
-    <select id="loadByIdDetail" parameterType="long" resultMap="petMap">
-        SELECT
-        p.*, t.id tid,
-        t. NAME tname,
-        s.id sid,
-        s. NAME sname
+    <!--AND p.state = 1 用来防止客户回退到已领养宠物页面 -->
+    <!--Pet loadDetailById(Long id)-->
+    <select id="loadDetailById" parameterType="long" resultMap="petMap">
+        SELECT p.*,
+            pd.id pdid, pd.adoptNotice, pd.intro,
+            s.id sid, s.name sname
         FROM
-        t_pet p
-        LEFT JOIN t_pet_type t ON p.type_id = t.id
+            t_pet p
+        LEFT JOIN t_pet_detail pd ON p.id = pd.pet_id
         LEFT JOIN t_shop s ON p.shop_id = s.id
-        where p.id = #{id}
+        where p.id = #{id} AND p.state = 1
     </select>
     <resultMap id="petMap" type="Pet">
 
@@ -160,6 +160,9 @@
         <result property="onsaletime" column="onsaletime"></result>
         <result property="state" column="state"></result>
         <result property="createtime" column="createtime"></result>
+        <result property="shop_id" column="shop_id"></result>
+        <result property="user_id" column="user_id"></result>
+        <result property="search_master_msg_id" column="search_master_msg_id"></result>
         <!--private PetDetail detail = new PetDetail();-->
         <association property="detail" javaType="PetDetail">
             <id property="id" column="pdid"></id>
