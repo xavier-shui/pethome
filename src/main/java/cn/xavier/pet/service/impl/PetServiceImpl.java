@@ -44,11 +44,11 @@ public class PetServiceImpl extends BaseServiceImpl<Pet> implements IPetService 
 
     @Override
     @Transactional
-    public void batchOnOrOffTheMarket(List<Long> ids, int state, Date date) {
+    public void batchOnOrOffTheMarket(List<Long> ids, int state) {
         Map<String, Object> params = new HashMap<>();
         params.put("ids", ids);
         params.put("state", state);
-        params.put("date", date);
+        params.put("date", new Date());
         // 多个参数可以用map或@Param
         petMapper.batchOnOrOffTheMarket(params);
     }

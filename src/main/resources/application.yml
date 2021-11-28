@@ -30,8 +30,8 @@ mybatis:
 logging:
   file: logs/application-debug.log
   pattern:
-    console: "%d %-5level %logger : %msg%n"
-    file: "%d %-5level [%thread] %logger : %msg%n"
+    console: "%d %-5level %logger [requestId=%X{requestId}]: %msg%n"
+    file: "%d %-5level [%thread] %logger [requestId=%X{requestId}]: %msg%n"
   level:
     org.springframework.web: error
     cn.xavier: trace
