@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.order.mapper.PetAcquisitionOrderMapper">
+    <select id="loadById" parameterType="long" resultType="PetAcquisitionOrder">
+        select * from t_order_pet_acquisition where id = #{id}
+    </select>
+    <select id="loadAll" resultType="PetAcquisitionOrder">
+        select * from t_order_pet_acquisition
+    </select>
+    <insert id="save" parameterType="PetAcquisitionOrder">
+        insert into t_order_pet_acquisition(
+            digest,
+            state,
+            price,
+            orderSn,
+            paySn,
+            pet_id,
+            user_id,
+            paytype,
+            shop_id,
+            address,
+            emp_id
+
+        )
+        values(
+           #{digest},
+           #{ state},
+           #{ price},
+           #{ orderSn},
+           #{ paySn},
+           #{ pet_id},
+           #{ user_id},
+           #{ paytype},
+           #{ shop_id},
+           #{ address},
+           #{ emp_id}
+        )
+    </insert>
+
+    <update id="update" parameterType="PetAcquisitionOrder">
+        update t_order_pet_acquisition set name=#{name},tel=#{tel},registerTime=#{registerTime},state=#{state},address=#{address},logo=#{logo},admin_id=#{admin.id} WHERE  id=#{id}
+
+    </update>
+
+
+    <delete id="remove" parameterType="long">
+        delete from t_order_pet_acquisition where id=#{id}
+    </delete>
+    <sql id="whereSql">
+        <where>
+            <if test="keywords!=null and keywords!=''">
+                AND t.digest LIKE concat('%',#{keywords},'%')
+            </if>
+            <if test="state!=null">
+                AND t.state =#{state}
+            </if>
+            <if test="handlerId!=null">
+                AND t.emp_id =#{handlerId}
+            </if>
+        </where>
+    </sql>
+    <!--    //分页查询总条数-->
+    <!--    Long queryCount(BaseQuery baseQuery);-->
+    <select id="queryCount" parameterType="PetAcquisitionOrderQuery" resultType="long">
+        select count(*) from t_order_pet_acquisition t
+        <include refid="whereSql"/>
+    </select>
+
+    <!--    //查询当前页数-->
+    <!--    List<T> queryData(BaseQuery baseQuery);-->
+    <select id="queryData" parameterType="PetAcquisitionOrderQuery" resultType="PetAcquisitionOrder">
+        select t.* from t_order_pet_acquisition t
+        <include refid="whereSql"/>
+        limit #{start},#{pageSize}
+    </select>
+</mapper>
