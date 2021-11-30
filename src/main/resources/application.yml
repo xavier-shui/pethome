@@ -39,3 +39,8 @@ logging:
 
 # 查看Spring Boot自动配置类生效情况
 debug: true
+
+# 订单超时时间
+order:
+  timeout:
+    minutes: 15

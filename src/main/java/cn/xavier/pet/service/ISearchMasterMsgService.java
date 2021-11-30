@@ -28,9 +28,8 @@ public interface ISearchMasterMsgService extends IBaseService<SearchMasterMsg> {
     PageList<SearchMasterMsg> list(SearchMasterMsgQuery query, LoginInfo loginInfo);
 
     /**
-     *  后台处理寻主消息
+     * 后台处理寻主消息
      *
-     * @param pet pet
      */
-    void handle(Pet pet);
+    void handle(Pet pet, LoginInfo loginInfo);
 }

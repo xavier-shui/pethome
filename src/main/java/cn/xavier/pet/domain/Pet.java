@@ -30,6 +30,8 @@ public class Pet extends BaseDomain {
     private User user;
     private Long search_master_msg_id;
 
+    private Integer payType;
+
     private PetDetail detail = new PetDetail();
 
 }

@@ -1,71 +1,115 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="cn.xavier.order.mapper.AdoptOrderMapper">
-    <select id="loadById" parameterType="long" resultType="AdoptOrder">
-        select * from t_Order_adopt where id = #{id}
+    <resultMap id="AdoptOrderMap" type="AdoptOrder">
+        <id column="id" property="id"/>
+        <result column="digest" property="digest"/>
+        <result column="state" property="state"/>
+        <result column="price" property="price"/>
+        <result column="orderSn" property="orderSn"/>
+        <result column="paySn" property="paySn"/>
+        <result column="lastPayTime" property="lastPayTime"/>
+        <result column="lastConfirmTime" property="lastConfirmTime"/>
+        <result column="pet_id" property="pet_id"/>
+        <result column="user_id" property="user_id"/>
+        <result column="shop_id" property="shop_id"/>
+        <association property="pet" javaType="Pet">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+        </association>
+        <association property="user" javaType="User">
+            <id column="uid" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="shop" javaType="Shop">
+            <id column="sid" property="id"/>
+            <result column="sname" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="loadById" parameterType="long" resultMap="AdoptOrderMap">
+        SELECT
+            o.*, p.id pid,
+            p. NAME pname,
+            u.id uid,
+            u.username,
+            s.id sid,
+            s.NAME sname
+        FROM
+            t_order_adopt o
+        LEFT JOIN t_pet p ON o.pet_id = p.id
+        LEFT JOIN t_user u ON o.user_id = u.id
+        LEFT JOIN t_shop s ON o.shop_id = s.id
+        WHERE
+	      o.id = #{id}
     </select>
     <select id="loadAll" resultType="adoptOrder">
-        select * from t_Order_adopt
+        select * from t_order_adopt
     </select>
-    <insert id="save" parameterType="AdoptOrder">
-        insert into t_Order_adopt(
-        name,
-        tel,
-        registerTime,
-        state,
-        address,
-        logo,
-        admin_id
+    <insert id="save" parameterType="AdoptOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into t_order_adopt(
+            digest,
+            state,
+            price,
+            orderSn,
+            paySn,
+            lastPayTime,
+            lastConfirmTime,
+            pet_id,
+            user_id,
+            shop_id
         )
         values
         (
-        #{   name},
-        #{   tel},
-        #{   registerTime},
-        #{   state},
-        #{   address},
-        #{   logo},
-        #{   admin.id}
+            #{digest},
+            #{state},
+            #{price},
+            #{orderSn},
+            #{paySn},
+            #{lastPayTime},
+            #{lastConfirmTime},
+            #{pet_id},
+            #{user_id},
+            #{shop_id}
         )
     </insert>
 
     <update id="update" parameterType="AdoptOrder">
-        update t_Order_adopt set name=#{name},tel=#{tel},registerTime=#{registerTime},state=#{state},address=#{address},logo=#{logo},admin_id=#{admin.id} WHERE  id=#{id}
+        update t_order_adopt set name=#{name},tel=#{tel},registerTime=#{registerTime},state=#{state},address=#{address},logo=#{logo},admin_id=#{admin.id} WHERE  id=#{id}
 
     </update>
 
 
     <delete id="remove" parameterType="long">
-        delete from t_Order_adopt where id=#{id}
+        delete from t_order_adopt where id=#{id}
     </delete>
     <!--    //分页查询总条数-->
     <!--    Long queryCount(BaseQuery baseQuery);-->
     <select id="queryCount" parameterType="AdoptOrderQuery" resultType="long">
-        select count(*) from t_Order_adopt t
+        select count(*) from t_order_adopt t
+        <include refid="whereSql"/>
+    </select>
+
+    <sql id="whereSql">
         <where>
-            <if test="keywords!=null and keywords!=''">
-                AND t.name LIKE concat('%',#{keywords},'%')
+            <if test="keyword!=null and keyword!=''">
+                AND t.name LIKE concat('%',#{keyword},'%')
             </if>
-            <if test="state!=-1">
-                AND t.state =#{state}
+            <if test="userId!=null">
+                AND t.user_id =#{userId}
+            </if>
+            <if test="shopId!=null">
+                AND t.shop_id =#{shopId}
             </if>
         </where>
-    </select>
+    </sql>
 
     <!--    //查询当前页数-->
     <!--    List<T> queryData(BaseQuery baseQuery);-->
     <select id="queryData" parameterType="AdoptOrderQuery" resultType="AdoptOrder">
-        select t.* from t_Order_adopt t
-        <where>
-            <if test="keywords!=null and keywords!=''">
-                AND t.name LIKE concat('%',#{keywords},'%')
-            </if>
-            <if test="state!=-1">
-                AND t.state =#{state}
-            </if>
-        </where>
+        select t.* from t_order_adopt t
+        <include refid="whereSql"/>
         limit #{start},#{pageSize}
     </select>
 </mapper>
