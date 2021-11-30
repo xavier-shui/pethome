@@ -56,8 +56,8 @@ public class SearchMasterMsgController {
      * @return the ajax response
      */
     @PutMapping("/handle")
-    public AjaxResponse handle(@RequestBody Pet pet) {
-        seachMasterMsgService.handle(pet);
+    public AjaxResponse handle(@RequestBody Pet pet, HttpServletRequest request) {
+        seachMasterMsgService.handle(pet, LoginContext.getLoginInfo(request));
         return AjaxResponse.of();
     }
 

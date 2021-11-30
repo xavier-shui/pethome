@@ -1,0 +1,47 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.user.mapper.UserAddressMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="UserAddress">
+        insert into t_user_address(
+            username,
+            email,
+            phone,
+            salt,
+            password,
+            state,
+            age,
+            createtime,
+            headImg
+        )
+        VALUES
+        (
+           #{ username},
+           #{ email},
+           #{ phone},
+           #{ salt},
+           #{ password},
+           #{ state},
+           #{ age},
+           #{ createtime},
+           #{ headImg}
+        )
+    </insert>
+
+    <!--UserAddress loadByUserAddressname(String username);-->
+    <select id="loadByUserAddressname" parameterType="string" resultType="UserAddress">
+        select * from t_user_address where username= #{username} or phone= #{username} or email= #{username}
+    </select>
+    <!--UserAddress loadByPhone(String phone);-->
+    <select id="loadByPhone" parameterType="string" resultType="UserAddress">
+        select * from t_user_address where phone= #{phone}
+    </select>
+    <select id="loadById" parameterType="long" resultType="UserAddress">
+        SELECT  *  FROM  t_user_address where id=#{id}
+    </select>
+
+    <select id="loadAll" resultType="UserAddress">
+        SELECT  *  FROM  t_user_address
+    </select>
+</mapper>

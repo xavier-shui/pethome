@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.order.mapper.ProductOrderDetailMapper">
+    <select id="loadById" parameterType="long" resultType="ProductOrderDetail">
+        select * from t_order_product_detail where id = #{id}
+    </select>
+    <select id="loadAll" resultType="ProductOrderDetail">
+        select * from t_order_product_detail
+    </select>
+    <insert id="save" parameterType="ProductOrderDetail">
+        insert into t_order_product_detail(
+            name,
+            resources,
+            saleprice,
+            offsaletime,
+            onsaletime,
+            state,
+            costprice,
+            createtime,
+            salecount,
+            order_id
+        )
+        values
+        (
+            #{name},
+            #{resources},
+            #{saleprice},
+            #{offsaletime},
+            #{onsaletime},
+            #{state},
+            #{costprice},
+            #{createtime},
+            #{salecount},
+            #{order_id}
+        )
+    </insert>
+
+    <update id="update" parameterType="ProductOrderDetail">
+        update t_order_product_detail set name=#{name},tel=#{tel},registerTime=#{registerTime},state=#{state},address=#{address},logo=#{logo},admin_id=#{admin.id} WHERE  id=#{id}
+
+    </update>
+
+
+    <delete id="remove" parameterType="long">
+        delete from t_order_product_detail where id=#{id}
+    </delete>
+    <!--    //分页查询总条数-->
+    <!--    Long queryCount(BaseQuery baseQuery);-->
+    <select id="queryCount" parameterType="ProductOrderDetailQuery" resultType="long">
+        select count(*) from t_order_product_detail t
+        <where>
+            <if test="keywords!=null and keywords!=''">
+                AND t.name LIKE concat('%',#{keywords},'%')
+            </if>
+            <if test="state!=-1">
+                AND t.state =#{state}
+            </if>
+        </where>
+    </select>
+
+    <!--    //查询当前页数-->
+    <!--    List<T> queryData(BaseQuery baseQuery);-->
+    <select id="queryData" parameterType="ProductOrderDetailQuery" resultType="ProductOrderDetail">
+        select t.* from t_order_product_detail t
+        <where>
+            <if test="keywords!=null and keywords!=''">
+                AND t.name LIKE concat('%',#{keywords},'%')
+            </if>
+            <if test="state!=-1">
+                AND t.state =#{state}
+            </if>
+        </where>
+        limit #{start},#{pageSize}
+    </select>
+</mapper>

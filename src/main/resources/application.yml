@@ -26,6 +26,7 @@ mybatis:
                         cn.xavier.user.domain,cn.xavier.user.query
                         cn.xavier.basic.domain,cn.xavier.basic.query
                         cn.xavier.pet.domain,cn.xavier.pet.query
+                        cn.xavier.order.domain,cn.xavier.order.query
 
 logging:
   file: logs/application-debug.log
@@ -35,3 +36,11 @@ logging:
   level:
     org.springframework.web: error
     cn.xavier: trace
+
+# 查看Spring Boot自动配置类生效情况
+debug: true
+
+# 订单超时时间
+order:
+  timeout:
+    minutes: 15
