@@ -29,6 +29,11 @@
     </resultMap>
 
     <select id="loadById" parameterType="long" resultMap="AdoptOrderMap">
+        SELECT * FROM t_order_adopt WHERE id = #{id}
+    </select>
+
+    <!--AdoptOrder loadDetailById(Long id);-->
+    <select id="loadDetailById" parameterType="long" resultMap="AdoptOrderMap">
         SELECT
             o.*, p.id pid,
             p. NAME pname,
@@ -76,7 +81,18 @@
     </insert>
 
     <update id="update" parameterType="AdoptOrder">
-        update t_order_adopt set name=#{name},tel=#{tel},registerTime=#{registerTime},state=#{state},address=#{address},logo=#{logo},admin_id=#{admin.id} WHERE  id=#{id}
+        UPDATE t_order_adopt SET
+            digest = #{digest},
+            state = #{state},
+            price = #{price},
+            orderSn = #{orderSn},
+            paySn = #{paySn},
+            lastPayTime = #{lastPayTime},
+            lastConfirmTime = #{lastConfirmTime},
+            pet_id = #{pet_id},
+            user_id = #{user_id},
+            shop_id = #{shop_id}
+        WHERE  id=#{id}
 
     </update>
 
@@ -96,11 +112,11 @@
             <if test="keyword!=null and keyword!=''">
                 AND t.name LIKE concat('%',#{keyword},'%')
             </if>
-            <if test="userId!=null">
-                AND t.user_id =#{userId}
+            <if test="user_id!=null">
+                AND t.user_id =#{user_id}
             </if>
-            <if test="shopId!=null">
-                AND t.shop_id =#{shopId}
+            <if test="shop_id!=null">
+                AND t.shop_id =#{shop_id}
             </if>
         </where>
     </sql>

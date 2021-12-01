@@ -10,11 +10,11 @@ public class OrderConstants {
      */
     public static final int TO_BE_PAID = 0;
     /**
-     * 待报账
+     * 待报账, 收购订单
      */
     public static final int TO_BE_REIMBURSED = 1;
     /**
-     * 待打款
+     * 待打款, 收购订单
      */
     public static final int PENDING_PAYMENT = 2;
     /**
@@ -25,4 +25,16 @@ public class OrderConstants {
      * 取消
      */
     public static final int CANCELLED = -1;
+
+
+    /**
+     * 领养订单, 待发货
+     */
+    public static final int TO_BE_DELIVERED = 1;
+
+    /**
+     * 领养订单, 待确认
+     */
+    public static final int TO_BE_CONFIRMED = 2;
+
 }

@@ -70,7 +70,7 @@
               and  a.shop_id = #{shop_id}
             </if>
             <if test="keyword!=null and keyword!=''">
-              and  a.name LIKE CONCAT("%", #{keyword}, "%") OR a.title LIKE CONCAT("%", #{keyword}, "%")
+              and  (a.name LIKE CONCAT("%", #{keyword}, "%") OR a.title LIKE CONCAT("%", #{keyword}, "%"))
             </if>
         </where>
     </sql>

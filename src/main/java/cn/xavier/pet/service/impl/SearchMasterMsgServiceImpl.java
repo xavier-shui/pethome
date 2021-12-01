@@ -65,7 +65,7 @@ public class SearchMasterMsgServiceImpl extends BaseServiceImpl<SearchMasterMsg>
     }
 
     @Override
-    public PageList<SearchMasterMsg> list(SearchMasterMsgQuery query, LoginInfo loginInfo) {
+    public PageList<SearchMasterMsg> queryPage(SearchMasterMsgQuery query, LoginInfo loginInfo) {
         if (loginInfo.getType() == LoginInfoConstants.ADMIN) {
             query.setShop_id(employeeMapper.loadByLoginInfoId(loginInfo.getId()).getShop_id()); // 如果是平台人员会设成null，
             // 店长或店员有值

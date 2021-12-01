@@ -27,12 +27,13 @@ mybatis:
                         cn.xavier.basic.domain,cn.xavier.basic.query
                         cn.xavier.pet.domain,cn.xavier.pet.query
                         cn.xavier.order.domain,cn.xavier.order.query
+                        cn.xavier.pay.domain,cn.xavier.pay.query
 
 logging:
   file: logs/application-debug.log
   pattern:
-    console: "%d %-5level %logger [requestId=%X{requestId}]: %msg%n"
-    file: "%d %-5level [%thread] %logger [requestId=%X{requestId}]: %msg%n"
+    console: "%d %-5level %logger %X{requestId}: %msg%n"
+    file: "%d %-5level [%thread] %logger %X{requestId}: %msg%n"
   level:
     org.springframework.web: error
     cn.xavier: trace

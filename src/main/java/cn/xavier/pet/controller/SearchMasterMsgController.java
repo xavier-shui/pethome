@@ -46,7 +46,7 @@ public class SearchMasterMsgController {
      */
     @PostMapping("/list")
     public PageList<SearchMasterMsg> list(@RequestBody SearchMasterMsgQuery query, HttpServletRequest request) {
-        return seachMasterMsgService.list(query, LoginContext.getLoginInfo(request));
+        return seachMasterMsgService.queryPage(query, LoginContext.getLoginInfo(request));
     }
 
     /**
