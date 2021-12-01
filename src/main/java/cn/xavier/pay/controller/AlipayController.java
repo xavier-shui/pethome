@@ -102,13 +102,13 @@ public class AlipayController {
                     bill.setUpdateTime(new Date());
                     payBillService.update(bill);
 
+                    // 生成流水单, 未做
+
                     // 如果是宠物收养订单
                     if (PayConstants.BUSINESS_TYPE_ADOPT.equals(bill.getBusinessType())) {
                         AdoptOrder adoptOrder = adoptOrderService.findById(bill.getBusinessKey());
                         // 下架宠物
                         petService.adopt(adoptOrder.getPet_id(), adoptOrder.getUser_id());
-
-                        // 生成流水单, 未做
 
                         // 修改订单状态
                         adoptOrder.setState(OrderConstants.TO_BE_DELIVERED);

@@ -86,14 +86,14 @@ public class SearchMasterMsgServiceImpl extends BaseServiceImpl<SearchMasterMsg>
         // 生成订单
         Employee employee = employeeMapper.loadByLoginInfoId(loginInfo.getId());
         SearchMasterMsg searchMasterMsg = searchMasterMsgMapper.loadById(pet.getSearch_master_msg_id());
-        PetAcquisitionOrder petAcquisitionOrder = pet2order(pet, searchMasterMsg, employee);
+        PetAcquisitionOrder petAcquisitionOrder = pet2Order(pet, searchMasterMsg, employee);
         petAcquisitionOrderMapper.save(petAcquisitionOrder);
 
         // 订单支付
 
     }
 
-    private PetAcquisitionOrder pet2order(Pet pet, SearchMasterMsg searchMasterMsg, Employee employee) {
+    private PetAcquisitionOrder pet2Order(Pet pet, SearchMasterMsg searchMasterMsg, Employee employee) {
         PetAcquisitionOrder order = new PetAcquisitionOrder();
         order.setDigest("[摘要]对" + pet.getName() + "收购订单！");
         order.setState(OrderConstants.TO_BE_PAID);//待支付
