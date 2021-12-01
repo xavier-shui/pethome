@@ -1,6 +1,5 @@
 package cn.xavier.pet.service;
 
-import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.basic.service.IBaseService;
 import cn.xavier.pet.domain.Pet;
 
@@ -26,8 +25,8 @@ public interface IPetService extends IBaseService<Pet> {
     /**
      * Adopt * 用户领养宠物
      *
-     * @param id        id
-     * @param loginInfo login info
+     * @param petId  pet id
+     * @param userId id
      */
-    void adopt(Long id, LoginInfo loginInfo);
+    void adopt(Long petId, Long userId);
 }

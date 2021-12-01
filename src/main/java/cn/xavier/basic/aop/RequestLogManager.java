@@ -26,7 +26,8 @@ public class RequestLogManager {
      @Before("execution(* cn.xavier.*.controller.*.*(..))")
      public void before() {
          //  入口传入请求ID
-         MDC.put(KEY, UUID.randomUUID().toString());
+         String uuid = UUID.randomUUID().toString();
+         MDC.put(KEY, uuid.substring(uuid.length() - 17)); // 不要太长, 屏幕不好显示
      }
 
      @After("execution(* cn.xavier.*.controller.*.*(..))")

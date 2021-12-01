@@ -25,7 +25,7 @@ public interface ISearchMasterMsgService extends IBaseService<SearchMasterMsg> {
      * @param loginInfo login info
      * @return the page list
      */
-    PageList<SearchMasterMsg> list(SearchMasterMsgQuery query, LoginInfo loginInfo);
+    PageList<SearchMasterMsg> queryPage(SearchMasterMsgQuery query, LoginInfo loginInfo);
 
     /**
      * 后台处理寻主消息

@@ -1,6 +1,5 @@
 package cn.xavier.pet.service.impl;
 
-import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.basic.service.impl.BaseServiceImpl;
 import cn.xavier.pet.constant.PetStateConstants;
 import cn.xavier.pet.domain.Pet;
@@ -60,17 +59,16 @@ public class PetServiceImpl extends BaseServiceImpl<Pet> implements IPetService 
 
     @Override
     @Transactional
-    public void adopt(Long id, LoginInfo loginInfo) {
-        Pet pet = petMapper.loadById(id);
+    public void adopt(Long petId, Long userId) {
+        Pet pet = petMapper.loadById(petId);
         // 修改状态为下架
         pet.setState(PetStateConstants.OFF_THE_MARKET);
-
 
         // 下架时间
         pet.setOffsaletime(new Date());
 
         // 设置user_id, 被领养还需设置店铺id为null
-        pet.setUser_id(userMapper.loadByLoginInfoId(loginInfo.getId()).getId());
+        pet.setUser_id(userId);
         pet.setShop_id(null);
         petMapper.update(pet);
     }

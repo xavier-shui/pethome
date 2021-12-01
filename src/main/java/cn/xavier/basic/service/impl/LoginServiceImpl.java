@@ -60,21 +60,16 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public Map<String, String> account(LoginDto loginDto) {
         // 参数校验
-        if (DtoUtil.anyEmptyFieldExist(loginDto)) {
-            throw new BusinessException("必要参数不能为空!");
-        }
+        GuardClauseUtil.check(DtoUtil.anyEmptyFieldExist(loginDto), "必要参数不能为空!");
 
         // 从数据库查用户
         LoginInfo loginInfo = loginInfoMapper.loadByLoginDto(loginDto);
-        if (loginInfo == null) {
-            throw new BusinessException("用户名或密码错误!");
-        }
+        GuardClauseUtil.check(loginInfo == null, "用户名或密码错误!");
 
         // 比对密码
         String md5PasswordProvided = MD5Utils.encrypByMd5(loginDto.getPassword() + loginInfo.getSalt());
-        if (!md5PasswordProvided.equals(loginInfo.getPassword())) {
-            throw new BusinessException("用户名或密码错误!");
-        }
+        GuardClauseUtil.check(!md5PasswordProvided.equals(loginInfo.getPassword()), "用户名或密码错误!");
+
 
         // 如果登录成功就设置token，再加loginInfo返回前端(注意敏感参数置空)
         return getLoginInfoMap(loginInfo);

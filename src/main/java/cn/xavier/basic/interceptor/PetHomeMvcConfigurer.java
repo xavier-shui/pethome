@@ -24,6 +24,7 @@ public class PetHomeMvcConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/user/registerByPhone")
                 .excludePathPatterns("/error") // 错误页面
+                .excludePathPatterns("/notify") // 支付宝异步通知
                 .excludePathPatterns("/verifyCode/**");
     }
 }

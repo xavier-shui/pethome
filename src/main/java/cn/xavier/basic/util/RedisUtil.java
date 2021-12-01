@@ -30,7 +30,8 @@ public class RedisUtil {
             throw new BusinessException("验证码已失效，请重新获取!");
         }
 
-        if (!verifyCode.equals(codeProvided)) {
+        // 不分大小写
+        if (!verifyCode.equalsIgnoreCase(codeProvided)) {
             throw new BusinessException("验证码有误!");
         }
     }
