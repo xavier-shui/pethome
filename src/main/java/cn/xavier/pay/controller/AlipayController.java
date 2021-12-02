@@ -10,9 +10,12 @@ import cn.xavier.pay.domain.PayBill;
 import cn.xavier.pay.service.IAlipayInfoService;
 import cn.xavier.pay.service.IPayBillService;
 import cn.xavier.pet.service.IPetService;
+import cn.xavier.quartz.constant.JobConstants;
+import cn.xavier.quartz.service.IQuartzService;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +39,9 @@ public class AlipayController {
 
     @Autowired
     private IAdoptOrderService adoptOrderService;
+
+    @Autowired
+    private IQuartzService quartzService;
 
 
     @PostMapping("/notify")
@@ -104,6 +110,7 @@ public class AlipayController {
 
                     // 生成流水单, 未做
 
+                    String jobName = "";
                     // 如果是宠物收养订单
                     if (PayConstants.BUSINESS_TYPE_ADOPT.equals(bill.getBusinessType())) {
                         AdoptOrder adoptOrder = adoptOrderService.findById(bill.getBusinessKey());
@@ -113,6 +120,14 @@ public class AlipayController {
                         // 修改订单状态
                         adoptOrder.setState(OrderConstants.TO_BE_DELIVERED);
                         adoptOrderService.update(adoptOrder);
+
+                        // 获取jobName
+                        jobName = JobConstants.jobNameConstruct(JobConstants.ADOPT_ORDER_PAYMENT_TIMEOUT, adoptOrder.getPaySn());
+                    }
+
+                    // 移除定时任务
+                    if (StringUtils.hasLength(jobName)) {
+                        quartzService.removeJob(jobName);
                     }
                 }
 

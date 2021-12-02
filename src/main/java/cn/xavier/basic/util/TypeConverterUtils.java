@@ -7,6 +7,10 @@ import cn.xavier.org.domain.Employee;
 import cn.xavier.user.domain.User;
 import org.springframework.beans.BeanUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 /**
  * @author Zheng-Wei Shui
  * @date 11/25/2021
@@ -29,5 +33,16 @@ public class TypeConverterUtils {
             loginInfo.setType(LoginInfoConstants.USER);
         }
         return loginInfo;
+    }
+
+    /**
+     * LocalDateTime转Date
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static Date LocalDateTime2Date(LocalDateTime localDateTime) {
+        // 系统默认时区
+        return Date.from(localDateTime.toInstant(ZonedDateTime.now().getOffset()));
     }
 }

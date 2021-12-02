@@ -1,8 +1,8 @@
 package cn.xavier.pay.service.impl;
 
-import cn.xavier.basic.exception.BusinessException;
 import cn.xavier.basic.service.impl.BaseServiceImpl;
 import cn.xavier.basic.util.GuardClauseUtil;
+import cn.xavier.order.domain.AdoptOrder;
 import cn.xavier.order.service.IProductOrderService;
 import cn.xavier.pay.constants.PayConstants;
 import cn.xavier.pay.domain.AlipayInfo;
@@ -69,5 +69,15 @@ public class PayBillServiceImpl extends BaseServiceImpl<PayBill> implements IPay
     @Override
     public PayBill findByUnionPaySn(String unionPaySn) {
         return payBillMapper.loadByUnionPaySn(unionPaySn);
+    }
+
+    @Override
+    public void cancelByQuartz(String paySn) {
+        PayBill payBill = payBillMapper.loadByUnionPaySn(paySn);
+        if (payBill.getState() != PayConstants.PAID) { // 确认不是已经支付了
+            // 还要主动调支付宝查询接口查，保证幂等性
+            payBill.setState(PayConstants.CANCELLED);
+            payBillMapper.update(payBill);
+        }
     }
 }

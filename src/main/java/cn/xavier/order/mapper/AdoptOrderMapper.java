@@ -11,4 +11,12 @@ public interface AdoptOrderMapper extends BaseMapper<AdoptOrder> {
      * @return the adopt order
      */
     AdoptOrder loadDetailById(Long id);
+
+    /**
+     * Load by paySn 统一支付单号
+     *
+     * @param paySn pay sn
+     * @return the adopt order
+     */
+    AdoptOrder loadByPaySn(String paySn);
 }

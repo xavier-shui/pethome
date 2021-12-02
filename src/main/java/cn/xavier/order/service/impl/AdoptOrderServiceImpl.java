@@ -5,6 +5,7 @@ import cn.xavier.basic.domain.LoginInfo;
 import cn.xavier.basic.service.impl.BaseServiceImpl;
 import cn.xavier.basic.util.CodeGenerateUtils;
 import cn.xavier.basic.util.PageList;
+import cn.xavier.basic.util.TypeConverterUtils;
 import cn.xavier.order.constant.OrderConstants;
 import cn.xavier.order.domain.AdoptOrder;
 import cn.xavier.order.domain.OrderAddress;
@@ -19,10 +20,14 @@ import cn.xavier.pay.service.IPayBillService;
 import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.mapper.PetMapper;
 import cn.xavier.pet.service.IPetService;
+import cn.xavier.quartz.constant.JobConstants;
+import cn.xavier.quartz.service.IQuartzService;
+import cn.xavier.quartz.util.QuartzJobInfo;
 import cn.xavier.user.domain.User;
 import cn.xavier.user.domain.UserAddress;
 import cn.xavier.user.mapper.UserAddressMapper;
 import cn.xavier.user.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +67,9 @@ public class AdoptOrderServiceImpl extends BaseServiceImpl<AdoptOrder> implement
     @Autowired
     private IPayBillService payBillService;
 
+    @Autowired
+    private IQuartzService quartzService;
+
 
     @Override
     public String submit(Map<String, Object> params, LoginInfo loginInfo) {
@@ -90,6 +98,15 @@ public class AdoptOrderServiceImpl extends BaseServiceImpl<AdoptOrder> implement
         PayBill bill = initBill(payMethod, pet, user, order);
         // 持久化支付单
         payBillService.add(bill);
+
+        // 添加定时任务
+        QuartzJobInfo jobInfo = new QuartzJobInfo();
+        String jobName = JobConstants.jobNameConstruct(JobConstants.ADOPT_ORDER_PAYMENT_TIMEOUT, order.getPaySn());
+        jobInfo.setJobName(jobName);
+        jobInfo.setFireDate(TypeConverterUtils.LocalDateTime2Date(order.getLastPayTime()));
+        // 不设置参数了，名字里面有详情
+        quartzService.addJob(jobInfo);
+
         // 调用支付接口
         return payBillService.pay(bill);
     }
@@ -107,6 +124,16 @@ public class AdoptOrderServiceImpl extends BaseServiceImpl<AdoptOrder> implement
     @Override
     public AdoptOrder findDetailById(Long id) {
         return adoptOrderMapper.loadDetailById(id);
+    }
+
+    @Override
+    public void cancelByQuartz(String paySn) {
+        AdoptOrder adoptOrder = adoptOrderMapper.loadByPaySn(paySn);
+        if (adoptOrder.getState() != PayConstants.PAID) { // 确认不是已经支付了
+            // 还要主动调支付宝查询接口查，保证幂等性
+            adoptOrder.setState(PayConstants.CANCELLED);
+            adoptOrderMapper.update(adoptOrder);
+        }
     }
 
     private PayBill initBill(Long payMethod, Pet pet, User user, AdoptOrder order) {

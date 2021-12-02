@@ -24,4 +24,11 @@ public interface IPayBillService extends IBaseService<PayBill> {
      * @return the pay bill
      */
     PayBill findByUnionPaySn(String unionPaySn);
+
+    /**
+     * Quartz通过统一支付号取消支付单
+     *
+     * @param paySn pay sn
+     */
+    void cancelByQuartz(String paySn);
 }

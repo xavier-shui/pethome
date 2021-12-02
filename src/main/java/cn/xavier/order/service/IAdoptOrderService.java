@@ -34,4 +34,11 @@ public interface IAdoptOrderService extends IBaseService<AdoptOrder> {
      * @return the adopt order
      */
     AdoptOrder findDetailById(Long id);
+
+    /**
+     * Quartz通过统一支付号取消订单
+     *
+     * @param paySn pay sn
+     */
+    void cancelByQuartz(String paySn);
 }

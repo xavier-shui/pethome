@@ -35,6 +35,7 @@
         select * from t_pay_bill WHERE unionPaySn = #{unionPaySn}
     </select>
 
+
     <update id="update" parameterType="PayBill">
         update t_pay_bill set
             digest=#{digest},

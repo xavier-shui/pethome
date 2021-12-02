@@ -30,8 +30,9 @@ public class AjaxResponseManager {
     @Around("execution(cn.xavier.basic.util.AjaxResponse cn.xavier.*.controller.*.*(..))")
     public AjaxResponse around(ProceedingJoinPoint joinPoint) {
         // 日志
-        log.debug(joinPoint.getSignature().toString() +
-                " executed with parameters " +  Arrays.asList(joinPoint.getArgs()).toString() + "!!!!!!!!!!!");
+        log.debug("{} executed with parameters {}!!!!!!!!!!!",
+                joinPoint.getSignature().toString(),
+                Arrays.asList(joinPoint.getArgs()).toString());
 
         try {
             return (AjaxResponse) joinPoint.proceed();

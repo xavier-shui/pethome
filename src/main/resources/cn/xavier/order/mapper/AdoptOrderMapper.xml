@@ -31,6 +31,10 @@
     <select id="loadById" parameterType="long" resultMap="AdoptOrderMap">
         SELECT * FROM t_order_adopt WHERE id = #{id}
     </select>
+    <!--AdoptOrder loadByPaySn(String paySn);-->
+    <select id="loadByPaySn"  resultType="AdoptOrder">
+        SELECT * FROM t_order_adopt WHERE paySn = #{paySn}
+    </select>
 
     <!--AdoptOrder loadDetailById(Long id);-->
     <select id="loadDetailById" parameterType="long" resultMap="AdoptOrderMap">
