@@ -1,7 +1,7 @@
 package cn.xavier.pet.service.impl;
 
 import cn.xavier.basic.service.impl.BaseServiceImpl;
-import cn.xavier.pet.constant.PetStateConstants;
+import cn.xavier.basic.constant.MarketStateConstants;
 import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.domain.PetDetail;
 import cn.xavier.pet.mapper.PetDetailMapper;
@@ -62,7 +62,7 @@ public class PetServiceImpl extends BaseServiceImpl<Pet> implements IPetService 
     public void adopt(Long petId, Long userId) {
         Pet pet = petMapper.loadById(petId);
         // 修改状态为下架
-        pet.setState(PetStateConstants.OFF_THE_MARKET);
+        pet.setState(MarketStateConstants.OFF_THE_MARKET);
 
         // 下架时间
         pet.setOffsaletime(new Date());

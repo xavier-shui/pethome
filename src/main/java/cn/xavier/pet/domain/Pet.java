@@ -2,7 +2,7 @@ package cn.xavier.pet.domain;
 
 import cn.xavier.basic.domain.BaseDomain;
 import cn.xavier.org.domain.Shop;
-import cn.xavier.pet.constant.PetStateConstants;
+import cn.xavier.basic.constant.MarketStateConstants;
 import cn.xavier.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class Pet extends BaseDomain {
     private Date offsaletime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date onsaletime;
-    private Integer state = PetStateConstants.OFF_THE_MARKET;
+    private Integer state = MarketStateConstants.OFF_THE_MARKET;
     private BigDecimal costprice;
     private Date createtime = new Date();
     private Long type_id;

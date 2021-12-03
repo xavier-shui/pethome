@@ -2,7 +2,7 @@ package cn.xavier.pet.controller;
 
 import cn.xavier.basic.util.AjaxResponse;
 import cn.xavier.basic.util.PageList;
-import cn.xavier.pet.constant.PetStateConstants;
+import cn.xavier.basic.constant.MarketStateConstants;
 import cn.xavier.pet.domain.Pet;
 import cn.xavier.pet.query.PetQuery;
 import cn.xavier.pet.service.IPetService;
@@ -40,9 +40,9 @@ public class PetController {
     @PostMapping({"/onsale", "/offsale"})
     public AjaxResponse batchOnOrOffTheMarket(@RequestBody List<Long> ids, HttpServletRequest request) {
         if (request.getRequestURI().contains("onsale")) {
-            petService.batchOnOrOffTheMarket(ids, PetStateConstants.ON_THE_MARKET);
+            petService.batchOnOrOffTheMarket(ids, MarketStateConstants.ON_THE_MARKET);
         } else {
-            petService.batchOnOrOffTheMarket(ids, PetStateConstants.OFF_THE_MARKET);
+            petService.batchOnOrOffTheMarket(ids, MarketStateConstants.OFF_THE_MARKET);
         }
         return AjaxResponse.of();
     }

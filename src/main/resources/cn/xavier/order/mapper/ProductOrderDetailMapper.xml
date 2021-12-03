@@ -20,7 +20,8 @@
             costprice,
             createtime,
             salecount,
-            order_id
+            order_id,
+            product_id
         )
         values
         (
@@ -33,7 +34,8 @@
             #{costprice},
             #{createtime},
             #{salecount},
-            #{order_id}
+            #{order_id},
+            #{product_id}
         )
     </insert>
 

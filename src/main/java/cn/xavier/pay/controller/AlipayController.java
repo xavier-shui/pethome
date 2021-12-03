@@ -2,7 +2,9 @@ package cn.xavier.pay.controller;
 
 import cn.xavier.order.constant.OrderConstants;
 import cn.xavier.order.domain.AdoptOrder;
+import cn.xavier.order.domain.ProductOrder;
 import cn.xavier.order.service.IAdoptOrderService;
+import cn.xavier.order.service.IProductOrderService;
 import cn.xavier.pay.constants.AlipayConfig;
 import cn.xavier.pay.constants.PayConstants;
 import cn.xavier.pay.domain.AlipayInfo;
@@ -42,6 +44,9 @@ public class AlipayController {
 
     @Autowired
     private IQuartzService quartzService;
+
+    @Autowired
+    private IProductOrderService productOrderService;
 
 
     @PostMapping("/notify")
@@ -111,26 +116,38 @@ public class AlipayController {
                     // 生成流水单, 未做
 
                     String jobName = "";
-                    // 如果是宠物收养订单
-                    if (PayConstants.BUSINESS_TYPE_ADOPT.equals(bill.getBusinessType())) {
-                        AdoptOrder adoptOrder = adoptOrderService.findById(bill.getBusinessKey());
-                        // 下架宠物
-                        petService.adopt(adoptOrder.getPet_id(), adoptOrder.getUser_id());
+                    switch(bill.getBusinessType()) {
+                        case PayConstants.BUSINESS_TYPE_ADOPT: { // 宠物收养订单
+                            AdoptOrder adoptOrder = adoptOrderService.findById(bill.getBusinessKey());
+                            // 下架宠物
+                            petService.adopt(adoptOrder.getPet_id(), adoptOrder.getUser_id());
 
-                        // 修改订单状态
-                        adoptOrder.setState(OrderConstants.TO_BE_DELIVERED);
-                        adoptOrderService.update(adoptOrder);
+                            // 修改订单状态
+                            adoptOrder.setState(OrderConstants.TO_BE_DELIVERED);
+                            adoptOrderService.update(adoptOrder);
 
-                        // 获取jobName
-                        jobName = JobConstants.jobNameConstruct(JobConstants.ADOPT_ORDER_PAYMENT_TIMEOUT, adoptOrder.getPaySn());
+                            // 获取jobName
+                            jobName = JobConstants.jobNameConstruct(JobConstants.ADOPT_ORDER_PAYMENT_TIMEOUT, adoptOrder.getPaySn());
+                            break;
+                        }
+                        case PayConstants.BUSINESS_TYPE_PRODUCT: { // 服务订单
+                            ProductOrder productOrder = productOrderService.findById(bill.getBusinessKey());
+                            // 修改订单状态
+                            productOrder.setState(OrderConstants.TO_BE_DELIVERED);
+                            productOrderService.update(productOrder);
+                            // 获取jobName
+                            jobName = JobConstants.jobNameConstruct(JobConstants.PRODUCT_ORDER_PAYMENT_TIMEOUT, productOrder.getPaySn());
+                            break;
+                        }
+                        default: break;
                     }
 
                     // 移除定时任务
                     if (StringUtils.hasLength(jobName)) {
                         quartzService.removeJob(jobName);
                     }
+                    // 可以通知商户
                 }
-
                 // System.out.println("success");
 
             } else {//验证失败

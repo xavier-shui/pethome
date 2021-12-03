@@ -11,7 +11,7 @@ import java.util.Map;
 public class QuartzJobInfo implements Serializable {
     private String jobName;
     private Map<String, Object> params;
-    private String cronj;
+    private String cronExpression;
     private Date fireDate;
 
     /**
@@ -44,7 +44,7 @@ public class QuartzJobInfo implements Serializable {
         cronArr[6] = year + "";
 
         String cron = String.join(" ", cronArr).trim();
-        this.setCronj(cron);
+        this.setCronExpression(cron);
     }
 
 }

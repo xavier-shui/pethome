@@ -33,7 +33,7 @@
     </select>
     <!--AdoptOrder loadByPaySn(String paySn);-->
     <select id="loadByPaySn"  resultType="AdoptOrder">
-        SELECT * FROM t_order_adopt WHERE paySn = #{paySn}
+        SELECT * FROM t_order_adopt WHERE paySn = #{id}
     </select>
 
     <!--AdoptOrder loadDetailById(Long id);-->

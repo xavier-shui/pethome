@@ -1,11 +1,13 @@
 package cn.xavier.order.domain;
 
 import cn.xavier.basic.domain.BaseDomain;
+import cn.xavier.org.domain.Shop;
+import cn.xavier.product.domain.Product;
+import cn.xavier.user.domain.User;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class ProductOrder extends BaseDomain {
@@ -14,11 +16,14 @@ public class ProductOrder extends BaseDomain {
     private BigDecimal price;
     private String orderSn;
     private String paySn;
-    private Date lastPayTime;
-    private Date lastConfirmTime;
+    private LocalDateTime lastPayTime;
+    private LocalDateTime lastConfirmTime;
     private Long product_id;
+    private Product product;
     private Long user_id;
+    private User user;
     private Long shop_id;  //分配
+    private Shop shop;
     private Long address_id;
 
 }

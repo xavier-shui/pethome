@@ -9,6 +9,56 @@
     <select id="loadAll" resultType="adoptOrder">
         select * from t_order_product
     </select>
+
+    <!--ProductOrder loadDetailById(Long id);-->
+    <select id="loadDetailById" parameterType="long" resultMap="ProductOrderMap">
+        SELECT
+        o.*,
+        p.id pid,
+        p.name pname,
+        u.id uid,
+        u.username,
+        s.id sid,
+        s.NAME sname
+        FROM
+        t_order_product o
+        LEFT JOIN t_product p ON o.product_id = p.id
+        LEFT JOIN t_user u ON o.user_id = u.id
+        LEFT JOIN t_shop s ON o.shop_id = s.id
+        WHERE
+        o.id = #{id}
+    </select>
+
+    <resultMap id="ProductOrderMap" type="ProductOrder">
+        <id column="id" property="id"/>
+        <result column="digest" property="digest"/>
+        <result column="state" property="state"/>
+        <result column="price" property="price"/>
+        <result column="orderSn" property="orderSn"/>
+        <result column="paySn" property="paySn"/>
+        <result column="lastPayTime" property="lastPayTime"/>
+        <result column="lastConfirmTime" property="lastConfirmTime"/>
+        <result column="product_id" property="product_id"/>
+        <result column="user_id" property="user_id"/>
+        <result column="shop_id" property="shop_id"/>
+        <association property="product" javaType="Product">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
+        </association>
+        <association property="user" javaType="User">
+            <id column="uid" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="shop" javaType="Shop">
+            <id column="sid" property="id"/>
+            <result column="sname" property="name"/>
+        </association>
+    </resultMap>
+    <!--ProductOrder loadByPaySn(String paySn);-->
+    <select id="loadByPaySn" resultType="ProductOrder">
+        select * from t_order_product WHERE paySn = #{paySn}
+    </select>
+
     <insert id="save" parameterType="ProductOrder" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into t_order_product(
             digest,
@@ -61,28 +111,28 @@
     <!--    Long queryCount(BaseQuery baseQuery);-->
     <select id="queryCount" parameterType="ProductOrderQuery" resultType="long">
         select count(*) from t_order_product t
-        <where>
-            <if test="keywords!=null and keywords!=''">
-                AND t.name LIKE concat('%',#{keywords},'%')
-            </if>
-            <if test="state!=-1">
-                AND t.state =#{state}
-            </if>
-        </where>
+        <include refid="whereSql"/>
     </select>
 
     <!--    //查询当前页数-->
     <!--    List<T> queryData(BaseQuery baseQuery);-->
     <select id="queryData" parameterType="ProductOrderQuery" resultType="ProductOrder">
         select t.* from t_order_product t
-        <where>
-            <if test="keywords!=null and keywords!=''">
-                AND t.name LIKE concat('%',#{keywords},'%')
-            </if>
-            <if test="state!=-1">
-                AND t.state =#{state}
-            </if>
-        </where>
+        <include refid="whereSql"/>
         limit #{start},#{pageSize}
     </select>
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                AND t.name LIKE concat('%',#{keyword},'%')
+            </if>
+            <if test="user_id!=null">
+                AND t.user_id =#{user_id}
+            </if>
+            <if test="shop_id!=null">
+                AND t.shop_id =#{shop_id}
+            </if>
+        </where>
+    </sql>
 </mapper>

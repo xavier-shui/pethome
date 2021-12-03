@@ -33,7 +33,7 @@ public class QuartzServiceImpl implements IQuartzService {
 
     @Override
     public void addJob(QuartzJobInfo jobInfo) {
-        QuartzUtils.addJob(sched, jobInfo.getJobName(), MainJob.class, jobInfo.getParams(), jobInfo.getCronj());
+        QuartzUtils.addJob(sched, jobInfo.getJobName(), MainJob.class, jobInfo.getParams(), jobInfo.getCronExpression());
         log.debug("添加定时任务: {}", jobInfo.getJobName());
     }
 

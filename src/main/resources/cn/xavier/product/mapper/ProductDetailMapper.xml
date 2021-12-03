@@ -1,0 +1,25 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xavier.product.mapper.ProductDetailMapper">
+
+    <insert id="save" parameterType="ProductDetail">
+        insert into t_product_detail(product_id,intro,orderNotice) VALUES (
+        #{product_id},#{intro},#{orderNotice}
+        )
+    </insert>
+
+    <!--productDetailMapper.updateByProductId(detail);-->
+    <update id="updateByProductId" parameterType="ProductDetail">
+        UPDATE t_product_detail set intro=#{intro},orderNotice=#{orderNotice}
+        where product_id = #{product_id}
+    </update>
+    <select id="loadByProductId" resultType="ProductDetail" parameterType="long">
+        SELECT * from t_product_detail where product_id = #{productId}
+    </select>
+
+
+    <delete id="removeByProductId" parameterType="long">
+        delete from t_product_detail where product_id = #{productId}
+    </delete>
+</mapper>

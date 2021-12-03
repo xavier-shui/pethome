@@ -52,6 +52,7 @@ mybatis:
                         cn.xavier.pet.domain,cn.xavier.pet.query
                         cn.xavier.order.domain,cn.xavier.order.query
                         cn.xavier.pay.domain,cn.xavier.pay.query
+                        cn.xavier.product.domain,cn.xavier.product.query
 
 logging:
   file: logs/application-debug.log

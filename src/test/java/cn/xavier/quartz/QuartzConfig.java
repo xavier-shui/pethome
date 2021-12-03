@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration // 测试里面加这个不会影响主应用容器
 public class QuartzConfig {
-   /*@Bean
+/*   @Bean
     public JobDetail newJob(){
         return JobBuilder.newJob(PrintTimeJob.class)//PrintTimeJob我们的业务类
                 .withIdentity("9527")//可以给该JobDetail起一个id

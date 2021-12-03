@@ -10,7 +10,7 @@ import java.io.IOException;
 public class AlipayConfig {
 
     // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数
-    public static String notify_url = "https://cabb-2605-52c0-2-24f-00.ngrok.io/notify";
+    public static String notify_url = "http://b16f-110-184-230-165.ngrok.io/notify";
 
     // 页面跳转同步通知页面路径
     public static String return_url = "http://localhost/success.html";

@@ -27,7 +27,6 @@ import cn.xavier.user.domain.User;
 import cn.xavier.user.domain.UserAddress;
 import cn.xavier.user.mapper.UserAddressMapper;
 import cn.xavier.user.mapper.UserMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,6 +110,14 @@ public class AdoptOrderServiceImpl extends BaseServiceImpl<AdoptOrder> implement
         return payBillService.pay(bill);
     }
 
+    private OrderAddress initOrderAddress(AdoptOrder order, UserAddress userAddress) {
+        OrderAddress orderAddress = new OrderAddress();
+        BeanUtils.copyProperties(userAddress, orderAddress);
+        orderAddress.setOrder_id(order.getId());
+        orderAddress.setOrderSn(order.getOrderSn());
+        return orderAddress;
+    }
+
     @Override
     public PageList<AdoptOrder> queryPage(AdoptOrderQuery adoptOrderQuery, LoginInfo loginInfo) {
         if (loginInfo.getType() == LoginInfoConstants.ADMIN) {
@@ -152,14 +159,6 @@ public class AdoptOrderServiceImpl extends BaseServiceImpl<AdoptOrder> implement
         return bill;
     }
 
-
-    private OrderAddress initOrderAddress(AdoptOrder order, UserAddress userAddress) {
-        OrderAddress orderAddress = new OrderAddress();
-        BeanUtils.copyProperties(userAddress, orderAddress);
-        orderAddress.setOrder_id(order.getId());
-        orderAddress.setOrderSn(order.getOrderSn());
-        return orderAddress;
-    }
 
     private AdoptOrder initAdoptOrder(Pet pet, User user) {
         AdoptOrder order = new AdoptOrder();

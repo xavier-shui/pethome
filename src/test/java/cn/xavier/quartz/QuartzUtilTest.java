@@ -35,5 +35,11 @@ public class QuartzUtilTest extends BaseTest {
 
     }
 
+    // 为了启动测试环境看定时任务
+    @Test
+    public void test2() throws InterruptedException {
+        Thread.sleep(100000000);
+    }
+
 
 }

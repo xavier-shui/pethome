@@ -1,10 +1,10 @@
-package cn.xavier.pet.constant;
+package cn.xavier.basic.constant;
 
 /**
  * @author Zheng-Wei Shui
  * @date 11/27/2021
  */
-public class PetStateConstants {
+public class MarketStateConstants {
 
     /**
      * DISCONTINUED 下架, no longer be sold

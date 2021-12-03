@@ -1,6 +1,7 @@
 package cn.xavier.quartz.job;
 
 import cn.xavier.order.service.IAdoptOrderService;
+import cn.xavier.order.service.IProductOrderService;
 import cn.xavier.pay.service.IPayBillService;
 import cn.xavier.quartz.constant.JobConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ public class MainJob implements Job {
     @Autowired
     private IPayBillService payBillService;
 
+    @Autowired
+    private IProductOrderService productOrderService;
+
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -31,15 +35,20 @@ public class MainJob implements Job {
         String jobName = context.getJobDetail().getKey().getName();
         String jobType = jobName.split(":")[0];
         String paySn = jobName.split(":")[1];
+        // 取消订单
         switch (jobType) {
             case JobConstants.ADOPT_ORDER_PAYMENT_TIMEOUT: {
-                // 取消订单和支付单
                 adoptOrderService.cancelByQuartz(paySn);
-                payBillService.cancelByQuartz(paySn);
+                break;
+            }
+            case JobConstants.PRODUCT_ORDER_PAYMENT_TIMEOUT: {
+                productOrderService.cancelByQuartz(paySn);
                 break;
             }
             default: break;
         }
+        // 取消支付单
+        payBillService.cancelByQuartz(paySn);
         log.debug("支付：{} 超时已自动取消", paySn);
     }
 }

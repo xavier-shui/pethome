@@ -12,6 +12,7 @@ import java.util.Scanner;
  */
 public class DbColumnSort {
     public static void main(String[] args) throws Exception {
+        System.out.println("输入任意字符进入下次循环");
         Scanner scanner = new Scanner(System.in);
         while(scanner.next() != null) { // 输入任意字符进入下一次循环
             StringBuilder sb = new StringBuilder();
